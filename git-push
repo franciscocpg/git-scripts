@@ -1,0 +1,3 @@
+#!/bin/bash
+GIT_REPO_PATH="$1"
+git-cmd push "" "$GIT_REPO_PATH" 
