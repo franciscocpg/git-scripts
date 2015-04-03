@@ -1,0 +1,27 @@
+#!/bin/bash
+CMD="$1"
+CMD_ARGS="$2"
+GIT_REPO_PATH="$3"
+clear
+
+gitCmd() {
+  local path="$1"
+  cd "$path"
+  echo "=========================================="
+  echo "$CMD $CMD_ARGS $path"
+  if [ "$CMD_ARGS" != "" ]
+  then
+    git $CMD "$CMD_ARGS"
+  else
+    git $CMD
+  fi
+  cd .. 
+}
+
+if [[ "$GIT_REPO_PATH" = "" ]]; then
+  for dir in */; do
+    gitCmd "$dir"
+  done
+else
+  gitCmd "$GIT_REPO_PATH"
+fi
