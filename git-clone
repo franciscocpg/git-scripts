@@ -1,0 +1,2 @@
+GIT_REPO_PATH="$1"
+git-cmd "clone" "" "$GIT_REPO_PATH"
