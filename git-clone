@@ -1,16 +1,16 @@
 #!/bin/bash
 # Verifica se as configurações estão iniciadas
-# A unica forma de ler variável global é chamando com script com "." antes.
-# Então é melhor ler a o bashrc e achar o valor da variável com grep após o git-init-config
-echo "$TIDEXA_GIT_GLOBAL_NAMESPACE"
-
 git-init-config
 
+TEST=$(echo "$TIDEXA_GIT_GLOBAL_NAMESPACE")
+if [[ -z "$TEST" ]]; then
+	echo "Chame esse script colocando . antes para carregar as variáveis de ambiente. Exemplo: . git-clone URL"
+	exit
+fi
 GIT_REPO_PATH="$1"
-#git clone -v "$GIT_REPO_PATH"
+git clone -v "$GIT_REPO_PATH"
 REPO_NAME=$(basename "$GIT_REPO_PATH")
 DIR_NAME="${REPO_NAME%.*}"
 cd $DIR_NAME
-echo "git remote add $TIDEXA_GIT_GLOBAL_NAMESPACE git@$TIDEXA_GIT_URL:$TIDEXA_GIT_GLOBAL_NAMESPACE/$REPO_NAME"
 git remote add $TIDEXA_GIT_GLOBAL_NAMESPACE git@$TIDEXA_GIT_URL:$TIDEXA_GIT_GLOBAL_NAMESPACE/$REPO_NAME
 cd ..
