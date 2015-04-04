@@ -1,0 +1,2 @@
+GIT_REPO_PATH="$1"
+git-cmd "add --all " "-v" "$GIT_REPO_PATH"

@@ -1,0 +1,43 @@
+#!/bin/bash
+# CHANGE indica se está trocando ou criando/verificando
+CHANGE="$1"
+BASH_RC=~/.bashrc
+
+changeGitProperty() {
+	local question="$1"
+	local gitProperty="$2"
+	GIT_CMD="git config --global $gitProperty"
+	if [[ "$CHANGE" != "true" ]]; then
+		currentGitPropertyValue=$($GIT_CMD)
+		if [[ -n "$currentGitPropertyValue" ]]; then
+			return;	
+		fi
+	fi
+	echo "$question"
+	read gitPropertyValue
+	$GIT_CMD "$gitPropertyValue"
+	echo "$gitProperty=$gitPropertyValue"
+}
+
+changeGitEnvVariable() {
+	local question="$1"
+	local gitEnvVariable="$2"
+	local gitEnvVariableValue="$3"
+	if [[ "$CHANGE" != "true" ]]; then
+		CONTAINS_GIT_TIDEXA_VARIABLE=$(cat $BASH_RC | grep $gitEnvVariable)
+		if [[ -n "$CONTAINS_GIT_TIDEXA_VARIABLE" ]]; then
+			return;
+		fi
+	fi
+	if [[ -z "$gitEnvVariableValue" ]]; then
+		echo "$question"
+		read gitEnvVariableValue
+	fi
+	echo "$gitEnvVariable=$gitEnvVariableValue" >> $BASH_RC
+}
+
+changeGitProperty "Entre com seu nome completo" "user.name"
+changeGitProperty "Entre com seu e-mail" "user.email"
+changeGitEnvVariable "Entre com seu usuário" "TIDEXA_GIT_NAMESPACE"
+changeGitEnvVariable "" "TIDEXA_GIT_URL" "acessa"
+changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
