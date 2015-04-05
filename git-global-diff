@@ -1,0 +1,8 @@
+#!/bin/bash -i
+# Verifica se as configurações estão iniciadas
+git-init-config
+
+GIT_REPO_PATH="$1"
+
+git-cmd fetch "-v $TIDEXA_GIT_GLOBAL_NAMESPACE" "$GIT_REPO_PATH"
+git-cmd diff "--shortstat origin/master $TIDEXA_GIT_GLOBAL_NAMESPACE/master" "$GIT_REPO_PATH"
