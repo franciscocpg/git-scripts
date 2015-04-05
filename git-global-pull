@@ -5,4 +5,4 @@ git-init-config
 GIT_REPO_PATH="$1"
 
 git-cmd pull "-v $TIDEXA_GIT_GLOBAL_NAMESPACE master" "$GIT_REPO_PATH"
-git-cmd push "" "$GIT_REPO_PATH"
+git-push "$GIT_REPO_PATH"
