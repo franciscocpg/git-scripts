@@ -1,5 +1,6 @@
 #!/bin/bash -i
 # Verifica ambiente
+NAME="$1"
 git-init-config
 
 # Importa chamadas api
@@ -26,7 +27,9 @@ getJSON() {
 	fi
 }
 
-getAttribute "Entre com o nome do projeto" "NAME"
+if [[ -z "$NAME" ]]; then
+	getAttribute "Entre com o nome do projeto" "NAME"
+fi
 
 if [[ -n "$NAME" ]]; then
 	JSON_RESP=$(\
@@ -41,9 +44,7 @@ if [[ -n "$NAME" ]]; then
 		SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
 		REPO_NAME=$(basename "$SSH_URL_TO_REPO")
 		DIR_NAME="${REPO_NAME%.*}"
-		echo "$SSH_URL_TO_REPO"
 		git clone "$SSH_URL_TO_REPO"
-		echo "clonado"
 		cd $DIR_NAME
 		touch README.md
 		git add README.md
