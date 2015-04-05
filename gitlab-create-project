@@ -1,0 +1,67 @@
+#!/bin/bash -i
+# Verifica ambiente
+git-init-config
+
+# Importa chamadas api
+. gitlab-call-api.sh
+
+getAttribute() {
+	local question="$1"
+	echo "$question"
+	read "$2"
+}
+
+getJSON() {
+	local attribute="$1"
+	if [[ "$attribute" != "." ]]; then
+		attribute=".$attribute"
+		noQuotes="true"
+	fi
+	if [[ -z "$noQuotes" ]]; then
+		echo "$JSON_RESP" | jq "$attribute"	
+	else
+		attibuteValue=$(echo "$JSON_RESP" | jq "$attribute")
+		# Substitui " por vazio
+		echo $attibuteValue | sed -r 's:"::g'
+	fi
+}
+
+getAttribute "Entre com o nome do projeto" "NAME"
+
+if [[ -n "$NAME" ]]; then
+	JSON_RESP=$(\
+	 callGitlabAPI \
+	 projects \
+	 "{\"name\":\"$NAME\", \"namespace_id\":\"$TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID\"}" \
+	 )
+	getJSON .
+	ID=$(getJSON id)
+	if [[ "$ID" != "null" ]]; then
+		# Cria branch master e inicializa
+		SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
+		REPO_NAME=$(basename "$SSH_URL_TO_REPO")
+		DIR_NAME="${REPO_NAME%.*}"
+		echo "$SSH_URL_TO_REPO"
+		git clone "$SSH_URL_TO_REPO"
+		echo "clonado"
+		cd $DIR_NAME
+		touch README.md
+		git add README.md
+		git commit -m "init"
+		echo "Criando branch master"
+		git push -v
+		cd ..
+		rm -Rf $DIR_NAME
+
+		# Cria fork
+		echo "Criando fork"
+		JSON_RESP=$(callGitlabAPI "projects/fork/$ID")
+		getJSON .
+
+		ID=$(getJSON id)
+		if [[ "$ID" != "null" ]]; then
+			SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
+			git-clone $SSH_URL_TO_REPO
+		fi
+	fi
+fi

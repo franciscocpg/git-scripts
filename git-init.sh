@@ -4,6 +4,10 @@ BASH_RC=~/.bashrc
 GIT_IGNORE_GLOBAL_HOME=~/.gitignore_global
 FOLDER=$(pwd)
 
+# jq utilizado para trabalhar com as respostas em JSON
+# da API do gitlab
+sudo apt-get install jq
+
 # Ignorar globalmente
 # cp .gitignore_global ~ 
 # Testar com link simbólico ao invés de copiar

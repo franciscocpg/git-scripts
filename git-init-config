@@ -38,6 +38,9 @@ changeGitEnvVariable() {
 
 changeGitProperty "Entre com seu nome completo" "user.name"
 changeGitProperty "Entre com seu e-mail" "user.email"
-changeGitEnvVariable "Entre com seu usuário" "TIDEXA_GIT_NAMESPACE"
+changeGitEnvVariable "Entre com seu usuário (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GIT_NAMESPACE"
+changeGitEnvVariable "Entre o token privado (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GITLAB_TOKEN"
 changeGitEnvVariable "" "TIDEXA_GIT_URL" "acessa"
+changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" "https://git.tidexa-es.com:9443/api/v3"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
+changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
