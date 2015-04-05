@@ -1,3 +1,4 @@
 #!/bin/bash
 GIT_REPO_PATH="$1"
-git-cmd push "-v" "$GIT_REPO_PATH" 
+GIT_REMOTE_REPO="$2"
+git-cmd push "-v $GIT_REMOTE_REPO" "$GIT_REPO_PATH" 
