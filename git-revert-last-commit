@@ -1,0 +1,3 @@
+#!/bin/bash
+folder="$1"
+git-cmd revert "HEAD" "$folder"
