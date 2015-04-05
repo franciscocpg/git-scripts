@@ -11,7 +11,8 @@ gitCmd() {
   echo "$CMD $CMD_ARGS $path"
   if [ "$CMD_ARGS" != "" ]
   then
-    git $CMD "$CMD_ARGS"
+    args=( $CMD_ARGS )
+    git $CMD "${args[@]}"
   else
     git $CMD
   fi

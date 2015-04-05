@@ -1,12 +1,7 @@
-#!/bin/bash
+#!/bin/bash -i
 # Verifica se as configurações estão iniciadas
 git-init-config
 
-TEST=$(echo "$TIDEXA_GIT_GLOBAL_NAMESPACE")
-if [[ -z "$TEST" ]]; then
-	echo "Chame esse script colocando . antes para carregar as variáveis de ambiente. Exemplo: . git-clone URL"
-	exit
-fi
 GIT_REPO_PATH="$1"
 git clone -v "$GIT_REPO_PATH"
 REPO_NAME=$(basename "$GIT_REPO_PATH")
