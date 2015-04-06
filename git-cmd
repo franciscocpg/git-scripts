@@ -3,60 +3,89 @@ CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
 
-clear
-
-gitCmd() {
-  local path="$1"
-  cd "$path"
-  execGitCmd="true"
-  if [[ "$CMD" = "push" ]]; then
-    outputCmd=$(git status -s -b)
-    # Pega a primeira linha da saida
-    outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
-    # Não executa o push se a saida não contém o caracter [
-    if [[ "$outputCmd" != *"["* ]]
-    then
-      execGitCmd="false"
-    fi
-    outputCmd=echo 
+echo "$1"
+echo "$2"
+echo "$3"
+idx=0
+newArgs[0]=""
+args=( $CMD_ARGS )
+for i in ${args[@]}; do
+  echo $idx
+  value=${args[idx]}
+  if [[ -z "$value" ]]; then
+    continue
   fi
-  if [[ "$execGitCmd" = "true" ]]; then
-    if [[ "$CMD" != "status" ]]; then
-      echo "=========================================="
-      echo "$CMD $CMD_ARGS $path"
-    fi
-    if [ "$CMD_ARGS" != "" ]
-    then
-      args=( $CMD_ARGS )
-      gitCmdExec="git $CMD "${args[@]}""
-    else
-      gitCmdExec="git $CMD"
-    fi
-    if [[ "$CMD" = "status" ]]; then
-      outputCmd=$($gitCmdExec)
-      if [[ "$outputCmd" != "## master...origin/master" ]]; then
-        echo "=========================================="
-        echo "$CMD $CMD_ARGS $path"
-        echo "$outputCmd"
-      fi
-    else
-      $gitCmdExec
-    fi
+  if [[ "$i" = "-m" ]]; then
+    idx=$((idx + 1))
+    value="$value \"${args[idx]}\""
+    value=$(echo "${value/@|@/ }")
   fi
-  cd .. 
-}
+  newArgs[idx]="$value"
+  echo "$value"
+  idx=$((idx + 1))
+done
+echo "${#newArgs[@]}"
+echo "${newArgs[1]}"
+gitCmdExec=`git $CMD "${newArgs[@]}"`
 
-out=""
-if [[ "$GIT_REPO_PATH" = "" ]]; then
-  for dir in */; do
-    out=${out}$(gitCmd "$dir")
-  done
-else
-  out=$(gitCmd "$GIT_REPO_PATH")
-fi
 
-if [[ -z "$out" ]]; then
-  echo "Nada a fazer"
-else
-  echo "$out"
-fi  
+echo $gitCmdExec
+$gitCmdExec
+
+# clear
+
+# gitCmd() {
+#   local path="$1"
+#   cd "$path"
+#   execGitCmd="true"
+#   if [[ "$CMD" = "push" ]]; then
+#     outputCmd=$(git status -s -b)
+#     # Pega a primeira linha da saida
+#     outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
+#     # Não executa o push se a saida não contém o caracter [
+#     if [[ "$outputCmd" != *"["* ]]
+#     then
+#       execGitCmd="false"
+#     fi
+#     outputCmd=echo 
+#   fi
+#   if [[ "$execGitCmd" = "true" ]]; then
+#     if [[ "$CMD" != "status" ]]; then
+#       echo "=========================================="
+#       echo "$CMD $CMD_ARGS $path"
+#     fi
+#     if [ "$CMD_ARGS" != "" ]
+#     then
+#       args=( "$CMD_ARGS" )
+#       gitCmdExec="git $CMD "${args[@]}""
+#     else
+#       gitCmdExec="git $CMD"
+#     fi
+#     if [[ "$CMD" = "status" ]]; then
+#       outputCmd=$($gitCmdExec)
+#       if [[ "$outputCmd" != "## master...origin/master" ]]; then
+#         echo "=========================================="
+#         echo "$CMD $CMD_ARGS $path"
+#         echo "$outputCmd"
+#       fi
+#     else
+#       $gitCmdExec
+#     fi
+#   fi
+#   cd .. 
+# }
+
+# out=""
+# if [[ "$GIT_REPO_PATH" = "" ]]; then
+#   for dir in */; do
+#     out=${out}$(gitCmd "$dir")
+#   done
+# else
+#   out=$(gitCmd "$GIT_REPO_PATH")
+# fi
+
+# if [[ -z "$out" ]]; then
+#   echo "Nada a fazer"
+# else
+#   echo "$out"
+# fi  
