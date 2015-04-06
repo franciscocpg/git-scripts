@@ -2,5 +2,4 @@
 GIT_REPO_PATH="$1"
 echo "Mensagem do commit"
 read "MESSAGE"
-MESSAGE=$(echo "${MESSAGE/ /@|@}")
 git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH"
