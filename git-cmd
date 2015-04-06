@@ -39,13 +39,12 @@ gitCmd() {
       echo "$CMD $CMD_ARGS $path"
     fi
     if [[ "$CMD" = "status" ]]; then
-      echo "executando"
-      gitCmdExec
-      # if [[ "$outputCmd" != "## master...origin/master" ]]; then
-      #   echo "=========================================="
-      #   echo "$CMD $CMD_ARGS $path"
-      #   echo "$outputCmd"
-      # fi
+     outputCmd=$(gitCmdExec)
+      if [[ "$outputCmd" != "## master...origin/master" ]]; then
+        echo "=========================================="
+        echo "$CMD $CMD_ARGS $path"
+        echo "$outputCmd"
+      fi
     else
       gitCmdExec
     fi
