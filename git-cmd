@@ -2,19 +2,46 @@
 CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
+
 clear
 
 gitCmd() {
   local path="$1"
   cd "$path"
-  echo "=========================================="
-  echo "$CMD $CMD_ARGS $path"
-  if [ "$CMD_ARGS" != "" ]
-  then
-    args=( $CMD_ARGS )
-    git $CMD "${args[@]}"
-  else
-    git $CMD
+  execGitCmd="true"
+  if [[ "$CMD" = "push" ]]; then
+    outputCmd=$(git status -s -b)
+    # Pega a primeira linha da saida
+    outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
+    # Não executa o push se a saida não contém o caracter [
+    if [[ "$outputCmd" != *"["* ]]
+    then
+      execGitCmd="false"
+    fi
+    outputCmd=echo 
+  fi
+  if [[ "$execGitCmd" = "true" ]]; then
+    if [[ "$CMD" != "status" ]]; then
+      echo "=========================================="
+      echo "$CMD $CMD_ARGS $path"
+    fi
+    if [ "$CMD_ARGS" != "" ]
+    then
+      args=( $CMD_ARGS )
+      gitCmdExec="git $CMD "${args[@]}""
+    else
+      gitCmdExec="git $CMD"
+    fi
+    if [[ "$CMD" = "status" ]]; then
+      outputCmd=$($gitCmdExec)
+      if [[ "$outputCmd" != "## master...origin/master" ]]; then
+        echo "=========================================="
+        echo "$CMD $CMD_ARGS $path"
+        echo "$outputCmd"
+      fi
+    else
+      $gitCmdExec
+    fi
   fi
   cd .. 
 }

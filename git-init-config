@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 # CHANGE indica se está trocando ou criando/verificando
 CHANGE="$1"
 BASH_RC=~/.bashrc
