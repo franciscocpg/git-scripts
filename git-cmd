@@ -52,7 +52,7 @@ if [[ "$GIT_REPO_PATH" = "" ]]; then
     out=${out}$(gitCmd "$dir")
   done
 else
-  gitCmd "$GIT_REPO_PATH"
+  out=$(gitCmd "$GIT_REPO_PATH")
 fi
 
 if [[ -z "$out" ]]; then
