@@ -1,3 +1,4 @@
 #!/bin/bash
 folder="$1"
 git-cmd reset "--hard" "$folder"
+git-cmd clean "-f -d" "$folder"
