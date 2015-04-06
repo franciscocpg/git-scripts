@@ -1,4 +1,0 @@
-GIT_REPO_PATH="$1"
-git-add $GIT_REPO_PATH
-git-commit $GIT_REPO_PATH
-git-push $GIT_REPO_PATH

@@ -1,6 +1,4 @@
-#!/bin/bash
 GIT_REPO_PATH="$1"
-echo "Mensagem do commit"
-read MESSAGE
-git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH"
-git-cmd push "-v" "$GIT_REPO_PATH"
+git-add $GIT_REPO_PATH
+git-cmd-commit $GIT_REPO_PATH
+git-push $GIT_REPO_PATH
