@@ -1,10 +1,11 @@
 callGitlabAPI() {
-	local resource="$1"
-	local jsonData="$2"
+	local method="$1"
+	local resource="$2"
+	local jsonData="$3"
 	curl \
 		 -H "Content-Type: application/json" \
 		 -H "PRIVATE-TOKEN: $TIDEXA_GITLAB_TOKEN" \
 		 -d "$jsonData"\
-		 -X POST \
+		 -X $method \
 		  $TIDEXA_GITLAB_API_URL/$resource
 }

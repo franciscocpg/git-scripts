@@ -34,6 +34,7 @@ fi
 if [[ -n "$NAME" ]]; then
 	JSON_RESP=$(\
 	 callGitlabAPI \
+	 POST \
 	 projects \
 	 "{\"name\":\"$NAME\", \"namespace_id\":\"$TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID\"}" \
 	 )
@@ -56,7 +57,7 @@ if [[ -n "$NAME" ]]; then
 
 		# Cria fork
 		echo "Criando fork"
-		JSON_RESP=$(callGitlabAPI "projects/fork/$ID")
+		JSON_RESP=$(callGitlabAPI POST "projects/fork/$ID")
 		getJSON .
 
 		ID=$(getJSON id)
