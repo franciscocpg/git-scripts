@@ -2,6 +2,7 @@
 CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
+OUT=""
 clear
 
 printCmd() {
@@ -44,40 +45,29 @@ gitCmd() {
   fi
   if [[ "$execGitCmd" = "true" ]]; then
     if [[ "$CMD" = "status" ]]; then
-     outputCmd=$(gitCmdExec)
+      outputCmd=$(gitCmdExec)
       if [[ "$outputCmd" != "## master...origin/master" ]]; then
-        printCmd
-        echo "$outputCmd"
+        OUT="$OUT$(printCmd)"
+        OUT="$OUT$outputCmd"
       fi
     else
+      OUT=" "
       gitCmdExec "true"
     fi
   fi
   cd .. 
 }
 
-
-out=""
 if [[ "$GIT_REPO_PATH" = "" ]]; then
   for dir in */; do
-    if [[ "$CMD" = "status" ]]; then
-      out=${out}$(gitCmd "$dir")
-    else
       gitCmd "$dir"
-      out=" "
-    fi 
   done
 else
-  if [[ "$CMD" = "status" ]]; then
-    out=$(gitCmd "$GIT_REPO_PATH")
-  else
-    gitCmd "$GIT_REPO_PATH"
-    out=" "
-  fi
+  gitCmd "$GIT_REPO_PATH"
 fi
 
-if [[ -z "$out" ]]; then
+if [[ -z "$OUT" ]]; then
   echo "Nada a fazer"
 else
-  echo "$out"
+  echo "$OUT"
 fi  
