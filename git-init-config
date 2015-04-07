@@ -33,7 +33,7 @@ changeGitEnvVariable() {
 		echo "$question"
 		read gitEnvVariableValue
 	fi
-	echo "$gitEnvVariable=$gitEnvVariableValue" >> $BASH_RC
+	echo "export $gitEnvVariable=$gitEnvVariableValue" >> $BASH_RC
 }
 
 changeGitProperty "Entre com seu nome completo" "user.name"
