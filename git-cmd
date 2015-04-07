@@ -2,12 +2,18 @@
 CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
+OUT=""
+clear
+
+printCmd() {
+  echo -e "\n=========================================="
+  echo "$CMD $CMD_ARGS $path"
+}
 
 gitCmdExec() {
   local print="$1"
   if [[ "$print" = "true" ]]; then
-    echo "=========================================="
-    echo "$CMD $CMD_ARGS $path"
+    printCmd
   fi
   if [ "$CMD_ARGS" != "" ]
   then
@@ -39,32 +45,29 @@ gitCmd() {
   fi
   if [[ "$execGitCmd" = "true" ]]; then
     if [[ "$CMD" = "status" ]]; then
-     outputCmd=$(gitCmdExec)
+      outputCmd=$(gitCmdExec)
       if [[ "$outputCmd" != "## master...origin/master" ]]; then
-        echo "=========================================="
-        echo "$CMD $CMD_ARGS $path"
-        echo "$outputCmd"
+        OUT="$OUT$(printCmd)"
+        OUT="$OUT$outputCmd"
       fi
     else
+      OUT=" "
       gitCmdExec "true"
     fi
   fi
   cd .. 
 }
 
-clear
-
-out=""
 if [[ "$GIT_REPO_PATH" = "" ]]; then
   for dir in */; do
-    out=${out}$(gitCmd "$dir")
+      gitCmd "$dir"
   done
 else
-  out=$(gitCmd "$GIT_REPO_PATH")
+  gitCmd "$GIT_REPO_PATH"
 fi
 
-if [[ -z "$out" ]]; then
+if [[ -z "$OUT" ]]; then
   echo "Nada a fazer"
 else
-  echo "$out"
+  echo "$OUT"
 fi  
