@@ -68,7 +68,7 @@ if [[ "$GIT_REPO_PATH" = "" ]]; then
     fi 
   done
 else
-  if [[ "$CMD" = "status" || "$CMD" = "push" ]]; then
+  if [[ "$CMD" = "status" ]]; then
     out=$(gitCmd "$GIT_REPO_PATH")
   else
     gitCmd "$GIT_REPO_PATH"
