@@ -60,7 +60,7 @@ gitCmd() {
 out=""
 if [[ "$GIT_REPO_PATH" = "" ]]; then
   for dir in */; do
-    if [[ "$CMD" = "status" || "$CMD" = "push" ]]; then
+    if [[ "$CMD" = "status" ]]; then
       out=${out}$(gitCmd "$dir")
     else
       gitCmd "$dir"
