@@ -1,0 +1,5 @@
+#!/bin/bash
+# Abandona as alterações locais (removendo novos arquivos)
+folder="$1"
+git-revert-local "$folder"
+git-cmd clean "-f -d" "$folder"
