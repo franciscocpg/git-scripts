@@ -1,0 +1,9 @@
+#!/bin/bash -i
+# Verifica se as configurações estão iniciadas
+git-init-config
+
+GIT_GLOBAL_NAMESPACE="$1"
+GIT_REPO_URL="$2"
+REPO_NAME=$(basename "$GIT_REPO_URL")
+GIT_REPO_PATH="${REPO_NAME%.*}"
+git-cmd remote "add $TIDEXA_GIT_GLOBAL_NAMESPACE git@$TIDEXA_GIT_URL:$GIT_GLOBAL_NAMESPACE/$REPO_NAME" "$GIT_REPO_PATH"
