@@ -1,4 +1,4 @@
 #!/bin/bash
+# Abandona as alterações locais (não inclui novos arquivos)
 folder="$1"
 git-cmd reset "--hard" "$folder"
-git-cmd clean "-f -d" "$folder"

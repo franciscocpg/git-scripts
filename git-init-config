@@ -43,6 +43,6 @@ changeGitEnvVariable "Entre o token privado (Pode ser visualizado em Profile -> 
 changeGitEnvVariable "" "TIDEXA_GIT_URL" "acessa"
 changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" "https://git.tidexa-es.com:9443/api/v3"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
+changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
 changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
 git config --global push.default simple
-source $BASH_RC

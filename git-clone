@@ -2,10 +2,12 @@
 # Verifica se as configurações estão iniciadas
 git-init-config
 
-GIT_REPO_PATH="$1"
-git clone -v "$GIT_REPO_PATH"
-REPO_NAME=$(basename "$GIT_REPO_PATH")
-DIR_NAME="${REPO_NAME%.*}"
-cd $DIR_NAME
-git remote add $TIDEXA_GIT_GLOBAL_NAMESPACE git@$TIDEXA_GIT_URL:$TIDEXA_GIT_GLOBAL_NAMESPACE/$REPO_NAME
-cd ..
+GIT_REPO_URL="$1"
+GIT_GLOBAL_NAMESPACE="$2"
+
+if [[ -z "$GIT_GLOBAL_NAMESPACE" ]]; then
+	GIT_GLOBAL_NAMESPACE="$TIDEXA_GIT_GLOBAL_NAMESPACE"
+fi
+
+git clone -v "$GIT_REPO_URL"
+git-global-add "$GIT_GLOBAL_NAMESPACE" "$GIT_REPO_URL"

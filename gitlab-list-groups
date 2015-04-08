@@ -1,0 +1,9 @@
+#!/bin/bash
+. gitlab-call-api.sh
+ID="$1"
+FILTER="$2"
+if [[ -z "$ID" ]]; then
+	echo "Id do grupo (Vazio lista todos os grupos)"
+	read "ID"
+fi
+callGitlabAPI GET groups/$ID "" "$FILTER"

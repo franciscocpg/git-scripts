@@ -1,6 +1,8 @@
 #!/bin/bash -i
 # Verifica ambiente
-NAME="$1"
+GIT_GLOBAL_NAMESPACE_ID="$1"
+NAME="$2"
+
 git-init-config
 
 # Importa chamadas api
@@ -27,6 +29,13 @@ getJSON() {
 	fi
 }
 
+if [[ -z "$GIT_GLOBAL_NAMESPACE_ID" ]]; then
+	gitlab-list-groups " "
+	getAttribute "Entre com o id do namespace global" "GIT_GLOBAL_NAMESPACE_ID"
+fi
+
+echo "namespace: $GIT_GLOBAL_NAMESPACE_ID"
+
 if [[ -z "$NAME" ]]; then
 	getAttribute "Entre com o nome do projeto" "NAME"
 fi
@@ -36,7 +45,7 @@ if [[ -n "$NAME" ]]; then
 	 callGitlabAPI \
 	 POST \
 	 projects \
-	 "{\"name\":\"$NAME\", \"namespace_id\":\"$TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID\"}" \
+	 "{\"name\":\"$NAME\", \"namespace_id\":\"$GIT_GLOBAL_NAMESPACE_ID\"}" \
 	 )
 	getJSON .
 	ID=$(getJSON id)
@@ -63,7 +72,10 @@ if [[ -n "$NAME" ]]; then
 		ID=$(getJSON id)
 		if [[ "$ID" != "null" ]]; then
 			SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
-			git-clone $SSH_URL_TO_REPO
+			JSON_RESP=$(gitlab-list-groups "$GIT_GLOBAL_NAMESPACE_ID")
+			GIT_GLOBAL_NAMESPACE=$(getJSON name)
+			echo "GIT_GLOBAL_NAMESPACE:$GIT_GLOBAL_NAMESPACE"
+			git-clone $SSH_URL_TO_REPO "$GIT_GLOBAL_NAMESPACE" 
 		fi
 	fi
 fi
