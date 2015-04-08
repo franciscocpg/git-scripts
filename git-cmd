@@ -44,9 +44,17 @@ gitCmd() {
     fi
   fi
   if [[ "$execGitCmd" = "true" ]]; then
+    # Só mostra status do que alterou
     if [[ "$CMD" = "status" ]]; then
       outputCmd=$(gitCmdExec)
       if [[ "$outputCmd" != "## master...origin/master" ]]; then
+        OUT="$OUT$(printCmd)"
+        OUT="$OUT$outputCmd"
+      fi
+    # Só mostra diferença do que tem diferença
+    elif [[ "$CMD" = "diff" ]]; then
+      outputCmd=$(gitCmdExec)
+      if [[ -n "$outputCmd" ]]; then
         OUT="$OUT$(printCmd)"
         OUT="$OUT$outputCmd"
       fi
