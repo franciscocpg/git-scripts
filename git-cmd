@@ -55,7 +55,7 @@ gitCmd() {
     elif [[ "$CMD" = "diff" ]]; then
       outputCmd=$(gitCmdExec)
       if [[ -n "$outputCmd" ]]; then
-        OUT="$OUT$(printCmd)"
+        OUT="$OUT$(printCmd)\n"
         OUT="$OUT$outputCmd"
       fi
     else
@@ -77,5 +77,5 @@ fi
 if [[ -z "$OUT" ]]; then
   echo "Nada a fazer"
 else
-  echo "$OUT"
+  echo -e "$OUT"
 fi  
