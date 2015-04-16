@@ -1,0 +1,13 @@
+#!/bin/bash
+GIT_FILE="$1"
+PARAM="$2"
+if [[ -z "$PARAM" ]]; then
+	PARAM="--assume-unchanged"
+fi
+if [[ -f "$GIT_FILE" ]]; then
+	git update-index $PARAM "$GIT_FILE" 
+elif [[ -d "$GIT_FILE" ]]; then
+	git ls-files -- "$GIT_FILE" | xargs -l git update-index -q $PARAM  -- "$GIT_FILE"
+else
+	echo "Informe um arquivo ou diretório como parâmetro"
+fi
