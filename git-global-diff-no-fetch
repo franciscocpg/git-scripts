@@ -1,0 +1,4 @@
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+
+git-global-diff "$GIT_REPO_PATH" false
