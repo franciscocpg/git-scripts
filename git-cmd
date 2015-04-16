@@ -2,6 +2,7 @@
 CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
+BEFORE_EXEC="$4"
 OUT=""
 clear
 
@@ -11,6 +12,10 @@ printCmd() {
 }
 
 gitCmdExec() {
+  if [[ -f "$BEFORE_EXEC" ]]; then
+    echo "Executando $BEFORE_EXEC"
+    $BEFORE_EXEC
+  fi
   local print="$1"
   if [[ "$print" = "true" ]]; then
     printCmd

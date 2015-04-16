@@ -1,0 +1,3 @@
+#!/bin/bash
+GIT_FILE="$1"
+git-ignore-push "$GIT_FILE" "--no-assume-unchanged"
