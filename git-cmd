@@ -23,7 +23,7 @@ gitCmdExec() {
   if [ "$CMD_ARGS" != "" ]
   then
     args=( "$CMD_ARGS" )
-    if [[ "$CMD_ARGS" = *"-m"* ]]
+    if [[ "$CMD_ARGS" = *"\"-m"* ]]
     then
       git $CMD "${args[@]}"
     else 
