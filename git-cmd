@@ -14,7 +14,7 @@ printCmd() {
 gitCmdExec() {
   if [[ -f "$BEFORE_EXEC" ]]; then
     echo "Executando $BEFORE_EXEC"
-    $BEFORE_EXEC
+    ./$BEFORE_EXEC
   fi
   local print="$1"
   if [[ "$print" = "true" ]]; then
