@@ -24,18 +24,17 @@ gitCmdExec() {
   if [[ "$print" = "true" ]]; then
     printCmd
   fi
-  # 2>/dev/null -> Ignora as saídas com erro
   if [ "$CMD_ARGS" != "" ]
   then
     args=( "$CMD_ARGS" )
     if [[ "$CMD_ARGS" = "-m"* ]]
     then
-      git $CMD "${args[@]}" 2>/dev/null
+      git $CMD "${args[@]}"
     else 
-      git $CMD ${args[@]} 2>/dev/null
+      git $CMD ${args[@]}
     fi
   else
-    git $CMD 2>/dev/null
+    git $CMD
   fi
 }
 
