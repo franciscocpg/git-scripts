@@ -11,4 +11,4 @@ git-init-config
 if [[ "$FETCH" != "false" ]]; then
 	git-cmd fetch "-v $TIDEXA_GIT_GLOBAL_NAMESPACE" "$GIT_REPO_PATH"
 fi
-git-cmd diff "--stat origin/master $TIDEXA_GIT_GLOBAL_NAMESPACE/master" "$GIT_REPO_PATH" "$CLEAR" "" "$PRINT_PATH_ONLY"
+git-cmd diff "--stat origin/master $TIDEXA_GIT_GLOBAL_NAMESPACE/master" "$GIT_REPO_PATH" "$CLEAR" "$PRINT_PATH_ONLY" ""
