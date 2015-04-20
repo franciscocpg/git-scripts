@@ -2,9 +2,13 @@
 CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
-BEFORE_EXEC="$4"
+CLEAR="$4"
+PRINT_PATH_ONLY="$5"
+BEFORE_EXEC="$6"
 OUT=""
-clear
+if [[ "$CLEAR" != "false" ]]; then
+  clear
+fi
 
 printCmd() {
   echo -e "\n=========================================="
@@ -53,15 +57,24 @@ gitCmd() {
     if [[ "$CMD" = "status" ]]; then
       outputCmd=$(gitCmdExec)
       if [[ "$outputCmd" != "## master...origin/master" ]]; then
-        OUT="$OUT$(printCmd)"
-        OUT="$OUT$outputCmd"
+         if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
+          OUT="$OUT$path\n"
+        else
+          OUT="$OUT$(printCmd)"
+          OUT="$OUT$outputCmd"
+        fi
       fi
     # Só mostra diferença do que tem diferença
     elif [[ "$CMD" = "diff" ]]; then
       outputCmd=$(gitCmdExec)
-      if [[ -n "$outputCmd" ]]; then
-        OUT="$OUT$(printCmd)\n"
-        OUT="$OUT$outputCmd"
+      local status="$?"
+      if [[ -n "$outputCmd" && "$status" = "0" ]]; then
+        if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
+          OUT="$OUT$path\n"
+        else
+          OUT="$OUT$(printCmd)\n"
+          OUT="$OUT$outputCmd"
+        fi
       fi
     else
       OUT=" "
@@ -81,6 +94,7 @@ fi
 
 if [[ -z "$OUT" ]]; then
   echo "Nada a fazer"
+  exit 1
 else
   echo -e "$OUT"
 fi  
