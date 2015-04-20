@@ -1,6 +1,8 @@
 #!/bin/bash -i
 GIT_REPO_PATH="$1"
 FETCH="$2"
+CLEAR="$3"
+PRINT_PATH_ONLY="$4"
 
 # Verifica se as configurações estão iniciadas
 git-init-config
@@ -9,4 +11,4 @@ git-init-config
 if [[ "$FETCH" != "false" ]]; then
 	git-cmd fetch "-v $TIDEXA_GIT_GLOBAL_NAMESPACE" "$GIT_REPO_PATH"
 fi
-git-cmd diff "--stat origin/master $TIDEXA_GIT_GLOBAL_NAMESPACE/master" "$GIT_REPO_PATH"
+git-cmd diff "--stat origin/master $TIDEXA_GIT_GLOBAL_NAMESPACE/master" "$GIT_REPO_PATH" "$CLEAR" "" "$PRINT_PATH_ONLY"

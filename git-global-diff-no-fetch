@@ -1,4 +1,7 @@
 #!/bin/bash -i
 GIT_REPO_PATH="$1"
+CLEAR="$2"
+PRINT_PATH_ONLY="$3"
+FETCH="false"
 
-git-global-diff "$GIT_REPO_PATH" false
+git-global-diff "$GIT_REPO_PATH" "$FETCH" "$CLEAR" "$PRINT_PATH_ONLY"

@@ -1,0 +1,20 @@
+#!/bin/bash -i
+# Faz o pull somente do que fizer diferença
+
+# Verifica se as configurações estão iniciadas
+clear
+git-init-config
+
+GIT_REPO_PATH="$1"
+CLEAR="false"
+PRINT_PATH_ONLY="true"
+
+output=$(git-global-diff-no-fetch "$GIT_REPO_PATH" "$CLEAR" "$PRINT_PATH_ONLY")
+if test $? -eq 0 
+then
+	for dir in $output; do
+		git-global-pull "$dir" "$CLEAR"
+	done
+else 
+	echo "$output"
+fi
