@@ -1,0 +1,8 @@
+# Verifica o hash local
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+
+# Verifica se as configurações estão iniciadas
+git-init-config
+
+git-cmd rev-parse "HEAD" "$GIT_REPO_PATH" "false"

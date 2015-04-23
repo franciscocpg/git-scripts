@@ -1,0 +1,8 @@
+# Verifica o hash global
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+
+# Verifica se as configurações estão iniciadas
+git-init-config
+
+git-cmd ls-remote "-h $TIDEXA_GIT_GLOBAL_NAMESPACE" "$GIT_REPO_PATH" "false"
