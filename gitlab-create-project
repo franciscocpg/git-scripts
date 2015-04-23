@@ -1,9 +1,10 @@
 #!/bin/bash -i
 # Verifica ambiente
+git-init-config
+
 GIT_GLOBAL_NAMESPACE_ID="$1"
 NAME="$2"
 
-git-init-config
 
 # Importa chamadas api
 . gitlab-call-api.sh
@@ -33,8 +34,6 @@ if [[ -z "$GIT_GLOBAL_NAMESPACE_ID" ]]; then
 	gitlab-list-groups " "
 	getAttribute "Entre com o id do namespace global" "GIT_GLOBAL_NAMESPACE_ID"
 fi
-
-echo "namespace: $GIT_GLOBAL_NAMESPACE_ID"
 
 if [[ -z "$NAME" ]]; then
 	getAttribute "Entre com o nome do projeto" "NAME"
