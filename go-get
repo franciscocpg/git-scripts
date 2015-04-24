@@ -1,0 +1,8 @@
+#!/bin/bash
+# Busca um repositório do git
+# Para maiores informações veja https://golang.org/doc/code.html#remote
+URL="$1"
+PATH_URL=$(echo $URL | sed -r 's:https\://::g')
+
+echo "Baixando: $PATH_URL"
+go get "$PATH_URL"
