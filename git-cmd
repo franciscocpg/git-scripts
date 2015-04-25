@@ -68,7 +68,9 @@ gitCmd() {
     elif [[ "$CMD" = "diff" ]]; then
       outputCmd=$(gitCmdExec)
       local status="$?"
-      if [[ -n "$outputCmd" && "$status" = "0" ]]; then
+      if [[ "$status" != "0" ]]; then
+        OUT="\nErro: $path$OUT"
+      elif [[ -n "$outputCmd" ]]; then
         if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
           OUT="$OUT$path\n"
         else
