@@ -10,7 +10,6 @@ GOPATH=~/go
 installSoft golang
 
 mkdir $GOPATH
-mkdir $GOPATH/src
 
 CONTAINS_GOPATH=$(cat $BASH_RC | grep GOPATH)
 if [[ -z "$CONTAINS_GOPATH" ]]; then
