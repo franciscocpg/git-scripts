@@ -9,4 +9,8 @@ if [[ "$NAME" = "master" ]]; then
 	exit 1	
 fi
 git-cmd checkout "master" "$GIT_REPO_PATH"
+if [[ $? -ne 0 ]]; then
+	echo "Você possui alterações locais. Utilize git-revert-clean-local para descartá-las e execute esse comando novamente"
+	exit 1
+fi
 git-cmd branch "-D $NAME" "$GIT_REPO_PATH" "false"

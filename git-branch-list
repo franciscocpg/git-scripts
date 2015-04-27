@@ -1,0 +1,6 @@
+GIT_REPO_PATH="$1"
+if [[ -z "$GIT_REPO_PATH" ]]; then
+	echo "Informe um repositório"
+	exit 1
+fi
+git-cmd branch "" "$GIT_REPO_PATH"
