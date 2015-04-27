@@ -1,0 +1,22 @@
+#!/bin/bash -i
+# Busca um repositório do git
+# Para maiores informações veja https://golang.org/doc/code.html#remote
+URL="$1"
+PATH_URL=$(echo $URL | sed -r 's:https\://::g')
+PATH_URL=$(echo $PATH_URL | sed -r 's:.git::g')
+GOSRC=$GOPATH/src
+
+echo "Baixando: $PATH_URL"
+go get "$PATH_URL"
+
+# Renomeia sem a porta pois ainda não identifiquei como importar um pacote remote
+# com número da porta
+INDEX=$(echo `expr index "$PATH_URL" :`)
+if [[ "$INDEX" -gt "0" ]]; then
+	PATH_INDEX=$(echo `expr index "$PATH_URL" /`)
+	PORT_NUMBER=$(echo ${PATH_URL:$INDEX:$PATH_INDEX-$INDEX - 1})
+	PATH_URL=$(echo $PATH_URL | sed -r 's:\:'$PORT_NUMBER'::g')
+	PATH_INDEX=$(echo `expr index "$PATH_URL" /`)
+	SRC_PATH=$(echo ${PATH_URL:0:$PATH_INDEX - 1})
+	mv $GOSRC/$SRC_PATH:$PORT_NUMBER $GOSRC/$SRC_PATH
+fi

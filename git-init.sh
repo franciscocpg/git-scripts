@@ -8,6 +8,9 @@ FOLDER=$(pwd)
 # da API do gitlab
 sudo apt-get install jq
 
+# Meld será a ferramenta de diferenciação
+sudo apt-get install meld
+
 # Ignorar globalmente
 # cp .gitignore_global ~ 
 # Testar com link simbólico ao invés de copiar

@@ -1,0 +1,12 @@
+GIT_REPO_PATH="$1"
+NAME="$2"
+if [[ -z "$GIT_REPO_PATH" ]]; then
+	echo "Parâmetro vazio não permitido"
+	exit 1
+fi
+if [[ "$NAME" = "master" ]]; then
+	echo "Não é possível excluir o branch master"
+	exit 1	
+fi
+git-cmd checkout "master" "$GIT_REPO_PATH"
+git-cmd branch "-D $NAME" "$GIT_REPO_PATH" "false"

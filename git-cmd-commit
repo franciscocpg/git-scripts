@@ -1,5 +1,11 @@
 #!/bin/bash
 GIT_REPO_PATH="$1"
-echo "Mensagem do commit"
-read "MESSAGE"
-git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH"
+OUTPUT=$(git-cmd test-commit "" "$GIT_REPO_PATH")
+STATUS=$?
+if [[ "$STATUS" == "0" ]]; then
+	echo "Mensagem do commit"
+	read "MESSAGE"
+	git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH"
+else
+	echo "$OUTPUT"
+fi

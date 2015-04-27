@@ -1,0 +1,18 @@
+#!/bin/bash -i
+# Instala golang
+
+# Importação 
+. utils.sh
+
+# Variáveis
+BASH_RC=~/.bashrc
+GOPATH=~/go
+installSoft golang
+
+mkdir $GOPATH
+
+CONTAINS_GOPATH=$(cat $BASH_RC | grep GOPATH)
+if [[ -z "$CONTAINS_GOPATH" ]]; then
+	echo -e "\nexport GOPATH=$GOPATH" >> $BASH_RC
+	echo 'export PATH=${PATH}:$GOPATH/bin' >> $BASH_RC	
+fi

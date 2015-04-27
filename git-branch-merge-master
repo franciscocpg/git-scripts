@@ -1,0 +1,14 @@
+GIT_REPO_PATH="$1"
+NAME="$2"
+if [[ -z "$GIT_REPO_PATH" ]]; then
+	echo "Parâmetro vazio não permitido"
+	exit 1
+fi
+if [[ "$NAME" = "master" ]]; then
+	echo "Não é possível fazer o merge do branch master"
+	exit 1	
+fi
+git-cmd checkout "$NAME" "$GIT_REPO_PATH"
+git-commit "$GIT_REPO_PATH"
+git-cmd checkout "master" "$GIT_REPO_PATH" "false"
+git-cmd merge "$NAME" "$GIT_REPO_PATH" "false"
