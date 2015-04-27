@@ -2,10 +2,16 @@
 # Verifica se as configurações estão iniciadas
 git-init-config
 
-GIT_REMOTE_NAMESPACE_ALIAS="$1"
-GIT_REMOTE_NAMESPACE="$2"
-GIT_REPO_URL="$3"
+GIT_REPO_PATH="$1"
+if [[ -z "$GIT_REPO_PATH" ]]; then
+	echo "Informe um repositório"
+	exit 1
+elif [[ "$GIT_REPO_PATH" = "." ]]; then
+	BASE_PATH=$(pwd)
+else
+	BASE_PATH="$GIT_REPO_PATH"
+fi
+GIT_REMOTE_NAMESPACE_ALIAS="$2"
 
-REPO_NAME=$(basename "$GIT_REPO_URL")
-GIT_REPO_PATH="${REPO_NAME%.*}"
-git-cmd remote "add $GIT_REMOTE_NAMESPACE_ALIAS git@$TIDEXA_GIT_URL:$GIT_REMOTE_NAMESPACE/$REPO_NAME" "$GIT_REPO_PATH"
+REPO_NAME=$(basename "$BASE_PATH")
+git-cmd remote "add $GIT_REMOTE_NAMESPACE_ALIAS git@$TIDEXA_GIT_URL:$GIT_REMOTE_NAMESPACE_ALIAS/$REPO_NAME" "$GIT_REPO_PATH"

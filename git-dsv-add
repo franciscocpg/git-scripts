@@ -1,0 +1,9 @@
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+GIT_DSV_NAMESPACE="$2"
+
+if [[ -z "$GIT_DSV_NAMESPACE" ]]; then
+	GIT_DSV_NAMESPACE="$TIDEXA_GIT_DSV_NAMESPACE"
+fi
+
+git-remote-add "$GIT_REPO_PATH" "$GIT_DSV_NAMESPACE"

@@ -1,7 +1,7 @@
 GIT_REPO_PATH="$1"
 NAME="$2"
 if [[ -z "$GIT_REPO_PATH" ]]; then
-	echo "Parâmetro vazio não permitido"
+	echo "Informe um repositório"
 	exit 1
 fi
 OUTPUT=$(git-cmd checkout "-b $NAME" "$GIT_REPO_PATH")

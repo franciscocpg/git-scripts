@@ -1,0 +1,8 @@
+#!/bin/bash -i
+# Verifica se as configurações estão iniciadas
+git-init-config
+
+GIT_REPO_PATH="$1"
+CLEAR="$2"
+
+git-cmd pull "-v --no-edit $TIDEXA_GIT_DSV_NAMESPACE master" "$GIT_REPO_PATH" "$CLEAR" "" ".prePull"

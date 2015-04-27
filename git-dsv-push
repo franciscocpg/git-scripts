@@ -1,0 +1,3 @@
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+git-push "$GIT_REPO_PATH" "$TIDEXA_GIT_DSV_NAMESPACE"
