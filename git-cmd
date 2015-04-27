@@ -9,6 +9,7 @@ OUT=""
 if [[ "$CLEAR" != "false" ]]; then
   clear
 fi
+RETURN_STATUS="0"
 
 printCmd() {
   echo -e "\n=========================================="
@@ -16,26 +17,29 @@ printCmd() {
 }
 
 gitCmdExec() {
-  if [[ -f "$BEFORE_EXEC" ]]; then
-    echo "Executando $BEFORE_EXEC"
-    ./$BEFORE_EXEC
-  fi
-  local print="$1"
-  if [[ "$print" = "true" ]]; then
-    printCmd
-  fi
-  if [ "$CMD_ARGS" != "" ]
-  then
-    args=( "$CMD_ARGS" )
-    if [[ "$CMD_ARGS" = "-m"* ]]
-    then
-      git $CMD "${args[@]}"
-    else 
-      git $CMD ${args[@]}
+  if [[ "$CMD" != "test-commit" ]]; then
+    if [[ -f "$BEFORE_EXEC" ]]; then
+      echo "Executando $BEFORE_EXEC"
+      ./$BEFORE_EXEC
     fi
-  else
-    git $CMD
+    local print="$1"
+    if [[ "$print" = "true" ]]; then
+      printCmd
+    fi
+    if [ "$CMD_ARGS" != "" ]
+    then
+      args=( "$CMD_ARGS" )
+      if [[ "$CMD_ARGS" = "-m"* ]]
+      then
+        git $CMD "${args[@]}"
+      else 
+        git $CMD ${args[@]}
+      fi
+    else
+      git $CMD
+    fi
   fi
+  RETURN_STATUS=$?
 }
 
 gitCmd() {
@@ -48,6 +52,16 @@ gitCmd() {
     outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
     # Não executa o push se a saida não contém o caracter [
     if [[ "$outputCmd" != *"["* ]]
+    then
+      execGitCmd="false"
+    fi
+  fi
+  if [[ "$CMD" = "test-commit" ]]; then
+    outputCmd=$(git status -s -b)
+    # Pega a quantidade de linhas na saida
+    outputCmdLines=$(echo -e "$outputCmd" | wc -l)
+    # Não executa o commit se a saida tiver menos de 2 linhas
+    if [[ $outputCmdLines -lt 2 ]]
     then
       execGitCmd="false"
     fi
@@ -99,4 +113,5 @@ if [[ -z "$OUT" ]]; then
   exit 1
 else
   echo -e "$OUT"
+  exit $RETURN_STATUS
 fi  
