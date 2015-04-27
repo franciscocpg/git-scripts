@@ -10,6 +10,8 @@ if [[ "$CLEAR" != "false" ]]; then
   clear
 fi
 RETURN_STATUS="0"
+# Verifica se as configurações estão iniciadas
+git-init-config
 
 printCmd() {
   echo -e "\n=========================================="
