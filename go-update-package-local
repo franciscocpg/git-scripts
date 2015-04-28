@@ -1,0 +1,34 @@
+#!/bin/bash -i
+# Atualiza um pacote go local
+
+# Importação
+. utils.sh
+
+# Funções
+process() {
+	rm -Rf $GO_GLOBAL_REPO_PATH
+	cp -Rf $GO_REPO_PATH $GO_GLOBAL_REPO_PATH
+	STATUS=$?
+	if [[ $STATUS -eq 0 ]]; then
+		echo "Atualizado"
+	fi
+}
+
+# Variáveis
+GO_REPO_PATH="$1"
+GO_REPO_BASENAME_PATH=$(resolveBasename "$1")
+GO_GLOBAL_REPO_PATH=$TIDEXA_GLOBAL_GOPATH/$GO_REPO_BASENAME_PATH
+
+# Inicio
+OUTPUT=$(ls $GO_GLOBAL_REPO_PATH 2>&1) 
+STATUS=$?
+if [[ $STATUS -gt 0 ]]; then
+	answer=$(ask "Diretório $GO_GLOBAL_REPO_PATH inexistente. Deseja realmente continuar?")
+	if [[ "$answer" = "s" ]]; then
+		# Cria os diretório. Flag -p = parents
+		mkdir -p $GO_GLOBAL_REPO_PATH
+		process
+	fi
+else
+	process
+fi

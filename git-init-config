@@ -41,10 +41,15 @@ changeGitProperty "Entre com seu e-mail" "user.email"
 changeGitEnvVariable "Entre com seu usuário (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GIT_NAMESPACE"
 changeGitEnvVariable "Entre o token privado (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GITLAB_TOKEN"
 changeGitEnvVariable "" "TIDEXA_GIT_URL" "acessa"
-changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" "https://git.tidexa-es.com:9443/api/v3"
+changeGitEnvVariable "" "TIDEXA_GITLAB_DOMAIN" "git.tidexa-es.com"
+changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" "https://"'$TIDEXA_GITLAB_DOMAIN'":9443/api/v3"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
 changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
 changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
 git config --global push.default simple
+# Diff tool meld
 git config --global diff.tool meld
+# Mantém as credencias em cache por uma hora. Utilizado em https para não ficar pedindo
+# usuário e senha toda hora
+git config --global credential.helper 'cache --timeout=3600'
