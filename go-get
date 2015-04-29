@@ -18,5 +18,6 @@ if [[ "$INDEX" -gt "0" ]]; then
 	PATH_URL=$(echo $PATH_URL | sed -r 's:\:'$PORT_NUMBER'::g')
 	PATH_INDEX=$(echo `expr index "$PATH_URL" /`)
 	SRC_PATH=$(echo ${PATH_URL:0:$PATH_INDEX - 1})
-	mv $GOSRC/$SRC_PATH:$PORT_NUMBER $GOSRC/$SRC_PATH
+	rm -Rf $GOSRC/$SRC_PATH
+	mv -f $GOSRC/$SRC_PATH:$PORT_NUMBER $GOSRC/$SRC_PATH
 fi

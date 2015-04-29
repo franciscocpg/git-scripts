@@ -1,11 +1,12 @@
 #!/bin/bash
 GIT_REPO_PATH="$1"
-OUTPUT=$(git-cmd test-commit "" "$GIT_REPO_PATH")
+CLEAR="$2"
+OUTPUT=$(git-cmd test-commit "" "$GIT_REPO_PATH" "$CLEAR")
 STATUS=$?
 if [[ "$STATUS" == "0" ]]; then
 	echo "Mensagem do commit"
 	read "MESSAGE"
-	git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH"
+	git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH" "$CLEAR"
 else
 	echo "$OUTPUT"
 fi

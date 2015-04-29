@@ -7,6 +7,9 @@ fi
 if [[ "$NAME" = "master" ]]; then
 	echo "Não é possível excluir o branch master"
 	exit 1	
+elif [[ -z "$NAME" ]]; then
+	echo "Informe o nome do branch"
+	exit 1	
 fi
 git-cmd checkout "master" "$GIT_REPO_PATH"
 if [[ $? -ne 0 ]]; then
