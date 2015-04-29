@@ -47,56 +47,66 @@ gitCmdExec() {
 gitCmd() {
   local path="$1"
   cd "$path"
-  execGitCmd="true"
-  if [[ "$CMD" = "push" ]]; then
-    outputCmd=$(git status -s -b)
-    # Pega a primeira linha da saida
-    outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
-    # Não executa o push se a saida não contém o caracter [
-    if [[ "$outputCmd" != *"["* ]]
-    then
-      execGitCmd="false"
+  if [[ "$CMD" = "diff" ]]; then
+    # Diff imprime colorido
+    outputCmd=$(gitCmdExec)
+    if [[ -n "$outputCmd" ]]; then
+      OUT="$OUT$outputCmd"
+      printCmd
+      gitCmdExec
     fi
-  fi
-  if [[ "$CMD" = "test-commit" ]]; then
-    outputCmd=$(git status -s -b)
-    # Pega a quantidade de linhas na saida
-    outputCmdLines=$(echo -e "$outputCmd" | wc -l)
-    # Não executa o commit se a saida tiver menos de 2 linhas
-    if [[ $outputCmdLines -lt 2 ]]
-    then
-      execGitCmd="false"
+  else
+    execGitCmd="true"
+    if [[ "$CMD" = "push" ]]; then
+      outputCmd=$(git status -s -b)
+      # Pega a primeira linha da saida
+      outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
+      # Não executa o push se a saida não contém o caracter [
+      if [[ "$outputCmd" != *"["* ]]
+      then
+        execGitCmd="false"
+      fi
     fi
-  fi
-  if [[ "$execGitCmd" = "true" ]]; then
-    # Só mostra status do que alterou
-    if [[ "$CMD" = "status" ]]; then
-      outputCmd=$(gitCmdExec)
-      if [[ "$outputCmd" != "## master...origin/master" ]]; then
-         if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
-          OUT="$OUT$path\n"
-        else
-          OUT="$OUT$(printCmd)"
-          OUT="$OUT$outputCmd"
-        fi
+    if [[ "$CMD" = "test-commit" ]]; then
+      outputCmd=$(git status -s -b)
+      # Pega a quantidade de linhas na saida
+      outputCmdLines=$(echo -e "$outputCmd" | wc -l)
+      # Não executa o commit se a saida tiver menos de 2 linhas
+      if [[ $outputCmdLines -lt 2 ]]
+      then
+        execGitCmd="false"
       fi
-    # Só mostra diferença do que tem diferença
-    elif [[ "$CMD" = "diff" ]]; then
-      outputCmd=$(gitCmdExec)
-      local status="$?"
-      if [[ "$status" != "0" ]]; then
-        OUT="\nErro: $path$OUT"
-      elif [[ -n "$outputCmd" ]]; then
-        if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
-          OUT="$OUT$path\n"
-        else
-          OUT="$OUT$(printCmd)\n"
-          OUT="$OUT$outputCmd"
+    fi
+    if [[ "$execGitCmd" = "true" ]]; then
+      # Só mostra status do que alterou
+      if [[ "$CMD" = "status" ]]; then
+        outputCmd=$(gitCmdExec)
+        if [[ "$outputCmd" != "## master...origin/master" ]]; then
+           if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
+            OUT="$OUT$path\n"
+          else
+            OUT="$OUT$(printCmd)"
+            OUT="$OUT$outputCmd"
+          fi
         fi
+      # Só mostra diferença do que tem diferença
+      elif [[ "$CMD" = "diff" ]]; then
+        outputCmd=$(gitCmdExec)
+        local status="$?"
+        if [[ "$status" != "0" ]]; then
+          OUT="\nErro: $path$OUT"
+        elif [[ -n "$outputCmd" ]]; then
+          if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
+            OUT="$OUT$path\n"
+          else
+            OUT="$OUT$(printCmd)\n"
+            OUT="$OUT$outputCmd"
+          fi
+        fi
+      else
+        OUT=" "
+        gitCmdExec "true"
       fi
-    else
-      OUT=" "
-      gitCmdExec "true"
     fi
   fi
   cd .. 
@@ -114,6 +124,8 @@ if [[ -z "$OUT" ]]; then
   echo "Nada a fazer"
   exit 1
 else
-  echo -e "$OUT"
+  if [[ "$CMD" != "diff" ]]; then
+    echo -e "$OUT"
+  fi
   exit $RETURN_STATUS
 fi  
