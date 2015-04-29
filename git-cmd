@@ -47,7 +47,7 @@ gitCmdExec() {
 gitCmd() {
   local path="$1"
   cd "$path"
-  if [[ "$CMD" = "diff" ]]; then
+  if [[ "$CMD" = "diff" && "$PRINT_PATH_ONLY" != "true" ]]; then
     # Diff imprime colorido
     outputCmd=$(gitCmdExec)
     if [[ -n "$outputCmd" ]]; then
@@ -124,7 +124,7 @@ if [[ -z "$OUT" ]]; then
   echo "Nada a fazer"
   exit 1
 else
-  if [[ "$CMD" != "diff" ]]; then
+  if [[ "$CMD" != "diff" || "$PRINT_PATH_ONLY" = "true" ]]; then
     echo -e "$OUT"
   fi
   exit $RETURN_STATUS
