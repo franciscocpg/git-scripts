@@ -1,3 +1,2 @@
 GIT_REPO_PATH="$1"
-cd "$"
 git-cmd diff "--stat origin" "$GIT_REPO_PATH"
