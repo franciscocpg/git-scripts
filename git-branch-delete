@@ -1,19 +1,24 @@
 GIT_REPO_PATH="$1"
 NAME="$2"
-if [[ -z "$GIT_REPO_PATH" ]]; then
-	echo "Informe um repositório"
-	exit 1
+. utils.sh
+resp=$(ask "Deseja realmente excluir o branch $NAME")
+if [[ "$resp" = "s" ]]; then
+	if [[ -z "$GIT_REPO_PATH" ]]; then
+		echo "Informe um repositório"
+		exit 1
+	fi
+	if [[ "$NAME" = "master" ]]; then
+		echo "Não é possível excluir o branch master"
+		exit 1	
+	elif [[ -z "$NAME" ]]; then
+		echo "Informe o nome do branch"
+		exit 1	
+	fi
+	git-cmd checkout "master" "$GIT_REPO_PATH"
+	if [[ $? -ne 0 ]]; then
+		echo "Você possui alterações locais. Utilize git-revert-clean-local para descartá-las e execute esse comando novamente"
+		exit 1
+	fi
+	git-cmd branch "-D $NAME" "$GIT_REPO_PATH" "false"
+	git-cmd push "origin --delete $NAME" "$GIT_REPO_PATH" "false"
 fi
-if [[ "$NAME" = "master" ]]; then
-	echo "Não é possível excluir o branch master"
-	exit 1	
-elif [[ -z "$NAME" ]]; then
-	echo "Informe o nome do branch"
-	exit 1	
-fi
-git-cmd checkout "master" "$GIT_REPO_PATH"
-if [[ $? -ne 0 ]]; then
-	echo "Você possui alterações locais. Utilize git-revert-clean-local para descartá-las e execute esse comando novamente"
-	exit 1
-fi
-git-cmd branch "-D $NAME" "$GIT_REPO_PATH" "false"

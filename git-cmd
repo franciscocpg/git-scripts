@@ -57,7 +57,7 @@ gitCmd() {
     fi
   else
     execGitCmd="true"
-    if [[ "$CMD" = "push" ]]; then
+    if [[ "$CMD" = "push" && "$CMD_ARGS" != *"--delete"*  ]]; then
       outputCmd=$(git status -s -b)
       # Pega a primeira linha da saida
       outputCmd=$(echo -e "$outputCmd" | sed -n 1p)

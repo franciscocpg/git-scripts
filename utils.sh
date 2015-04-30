@@ -95,7 +95,8 @@ ask() {
 			* ) echo "Entre s[sim] ou n[não]";;
 		esac
 	done
-	echo $sn
+	# Converte em minúsculo
+	echo ${sn,,}
 }
 
 # Wrapper do comando "cd" mas sem output
