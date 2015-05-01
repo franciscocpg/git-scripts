@@ -1,0 +1,8 @@
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+NUMBER="$2"
+if [[ -z "$NUMBER" ]]; then
+	NUMBER="5"
+fi
+
+git-cmd log "-n $NUMBER --format=%H--|--%cd--|--%B --no-merges" "$GIT_REPO_PATH"
