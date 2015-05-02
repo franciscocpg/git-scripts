@@ -14,7 +14,4 @@ GOPATH_VAR=~/go
 installSoft golang
 # Cria o diretório
 mkdir $GOPATH
-# Adiciona no .bashrc
-appendToBashRC "GOPATH" "$GOPATH_VAR" "true" "true"
-appendToBashRC "TIDEXA_GLOBAL_SRC_GOPATH" '$GOPATH/src/$TIDEXA_GITLAB_DOMAIN/$TIDEXA_GIT_GLOBAL_NAMESPACE' "true" "true"
-appendToBashRC "TIDEXA_GLOBAL_PKG_GOPATH" '$GOPATH/pkg/linux_amd64/$TIDEXA_GITLAB_DOMAIN/$TIDEXA_GIT_GLOBAL_NAMESPACE' "true" "true"
+go-init
