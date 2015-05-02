@@ -1,0 +1,18 @@
+#!/bin/bash -i
+# Inicia golang
+
+# Importação 
+. utils.sh
+
+# Variáveis 
+# Nome deve ser diferente de GOPATH que é global
+GOPATH_VAR=~/go
+
+# Cria o diretório ignorando erro caso já exista
+mkdir $GOPATH_VAR > /dev/null 2>&1
+
+# Adiciona no .bashrc
+appendToBashRC "GOPATH" "$GOPATH_VAR" "true" "true"
+appendToBashRC "GOBIN" "$GOPATH_VAR/bin" "true" "true"
+appendToBashRC "TIDEXA_GLOBAL_SRC_GOPATH" '$GOPATH/src/$TIDEXA_GITLAB_DOMAIN/$TIDEXA_GIT_GLOBAL_NAMESPACE' "true" "true"
+appendToBashRC "TIDEXA_GLOBAL_PKG_GOPATH" '$GOPATH/pkg/linux_amd64/$TIDEXA_GITLAB_DOMAIN/$TIDEXA_GIT_GLOBAL_NAMESPACE' "true" "true"

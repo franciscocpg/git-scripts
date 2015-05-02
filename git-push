@@ -1,5 +1,15 @@
 #!/bin/bash
 GIT_REPO_PATH="$1"
 GIT_REMOTE_REPO="$2"
+GIT_CURRENT_BRANCH=$(git-cmd rev-parse "--abbrev-ref HEAD" "$GIT_REPO_PATH" "false" "" "" "false")
+if [[ -z "$GIT_REMOTE_REPO" ]]; then
+	GIT_REMOTE_REPO="origin"
+fi
+
 CLEAR="$3"
-git-cmd push "-v $GIT_REMOTE_REPO" "$GIT_REPO_PATH" "$CLEAR" "" ".prePush"
+git-cmd push "-v $GIT_REMOTE_REPO $GIT_CURRENT_BRANCH" "$GIT_REPO_PATH" "$CLEAR" "" ".prePush"
+GIT_CURRENT_REMOTE_BRANCH=$(git-cmd rev-parse "--abbrev-ref --symbolic-full-name @{u}" "$GIT_REPO_PATH" "false" "" "" "false")
+GIT_REMOTE_BRANCH="$GIT_REMOTE_REPO/$GIT_CURRENT_BRANCH"
+if [[ "$GIT_CURRENT_REMOTE_BRANCH" != "$GIT_REMOTE_BRANCH" ]]; then
+	git branch -u "$GIT_REMOTE_BRANCH"
+fi

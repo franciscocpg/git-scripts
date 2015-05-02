@@ -12,4 +12,4 @@ elif [[ -z "$NAME" ]]; then
 	exit 1	
 fi
 git-commit "$GIT_REPO_PATH"
-git-cmd difftool "-d master...$NAME" "$GIT_REPO_PATH" "false"
+git-cmd difftool "-d master...$NAME" "$GIT_REPO_PATH"

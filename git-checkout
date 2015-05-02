@@ -1,0 +1,9 @@
+#!/bin/bash -i
+GIT_REPO_PATH="$1"
+HASH="$2"
+if [[ -z "$HASH" ]]; then
+	echo "Informe um hash para checkout. Utilize git-log para ver os ultimos hashs"
+	exit 1
+fi
+
+git-cmd checkout "$HASH" "$GIT_REPO_PATH"

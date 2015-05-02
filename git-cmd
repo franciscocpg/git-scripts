@@ -5,6 +5,10 @@ GIT_REPO_PATH="$3"
 CLEAR="$4"
 PRINT_PATH_ONLY="$5"
 BEFORE_EXEC="$6"
+PRINT_CMD="$7"
+if [[ -z "$PRINT_CMD" ]]; then
+  PRINT_CMD="true"
+fi
 OUT=""
 if [[ "$CLEAR" != "false" ]]; then
   clear
@@ -14,8 +18,10 @@ RETURN_STATUS="0"
 git-init-config
 
 printCmd() {
-  echo -e "\n=========================================="
-  echo "$CMD $CMD_ARGS $path"
+  if [[ "$PRINT_CMD" = "true" ]]; then
+    echo -e "\n=========================================="
+    echo "$CMD $CMD_ARGS $path"
+  fi
 }
 
 gitCmdExec() {
@@ -57,7 +63,7 @@ gitCmd() {
     fi
   else
     execGitCmd="true"
-    if [[ "$CMD" = "push" ]]; then
+    if [[ "$CMD" = "push" && "$CMD_ARGS" != *"--delete"*  ]]; then
       outputCmd=$(git status -s -b)
       # Pega a primeira linha da saida
       outputCmd=$(echo -e "$outputCmd" | sed -n 1p)

@@ -59,7 +59,8 @@ appendToBashRC() {
 		eval VALUE=\$$variable
 		REPLACE="$variable=$VALUE"
 		NEW_VALUE="$variable=$value"
-		# Substitui
+		# Substitui apenas a primeira ocorrência
+		# Para substituir todas seria com duas barras CONTENTS=${CONTENTS//$REPLACE/$NEW_VALUE}
 		CONTENTS=${CONTENTS/$REPLACE/$NEW_VALUE}
 		# Salva no arquivo
 		echo -e "$CONTENTS" > $BASH_RC
@@ -95,7 +96,8 @@ ask() {
 			* ) echo "Entre s[sim] ou n[não]";;
 		esac
 	done
-	echo $sn
+	# Converte em minúsculo
+	echo ${sn,,}
 }
 
 # Wrapper do comando "cd" mas sem output
