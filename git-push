@@ -5,7 +5,7 @@ GIT_CURRENT_BRANCH=$(git-cmd rev-parse "--abbrev-ref HEAD" "$GIT_REPO_PATH" "fal
 if [[ -z "$GIT_REMOTE_REPO" ]]; then
 	GIT_REMOTE_REPO="origin"
 fi
-
+# teste
 CLEAR="$3"
 git-cmd push "-v $GIT_REMOTE_REPO $GIT_CURRENT_BRANCH" "$GIT_REPO_PATH" "$CLEAR" "" ".prePush"
 GIT_CURRENT_REMOTE_BRANCH=$(git-cmd rev-parse "--abbrev-ref --symbolic-full-name @{u}" "$GIT_REPO_PATH" "false" "" "" "false")
