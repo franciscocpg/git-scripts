@@ -6,12 +6,7 @@
 
 # Necessário o git estar inicializado
 git-init-config
-# Variáveis 
-# Nome deve ser diferente de GOPATH que é global
-GOPATH_VAR=~/go
 
 # Instala go
 installSoft golang
-# Cria o diretório
-mkdir $GOPATH
 go-init
