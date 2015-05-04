@@ -50,6 +50,21 @@ gitCmdExec() {
   RETURN_STATUS=$?
 }
 
+beforePush() {
+  GIT_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  if [[ -z "$GIT_REMOTE_REPO" ]]; then
+    GIT_REMOTE_REPO="origin"
+  fi
+}
+
+afterPush() {
+  GIT_CURRENT_REMOTE_BRANCH=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  GIT_REMOTE_BRANCH="$GIT_REMOTE_REPO/$GIT_CURRENT_BRANCH"
+  if [[ "$GIT_CURRENT_REMOTE_BRANCH" != "$GIT_REMOTE_BRANCH" ]]; then
+    git branch -u "$GIT_REMOTE_BRANCH"
+  fi
+}
+
 gitCmd() {
   local path="$1"
   cd "$path"
@@ -84,6 +99,9 @@ gitCmd() {
       fi
     fi
     if [[ "$execGitCmd" = "true" ]]; then
+      if [[ "$CMD" = "push" ]]; then
+        beforePush
+      fi
       # Só mostra status do que alterou
       if [[ "$CMD" = "status" ]]; then
         outputCmd=$(gitCmdExec)
@@ -112,6 +130,9 @@ gitCmd() {
       else
         OUT=" "
         gitCmdExec "true"
+        if [[ "$CMD" = "push" ]]; then
+          afterPush
+        fi
       fi
     fi
   fi
