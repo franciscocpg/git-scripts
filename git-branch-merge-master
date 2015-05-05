@@ -4,6 +4,10 @@ if [[ -z "$GIT_REPO_PATH" ]]; then
 	echo "Informe um repositório"
 	exit 1
 fi
+if [[ -z "$NAME" ]]; then
+	echo "Informe o nome do branch"
+	exit 1	
+fi
 if [[ "$NAME" = "master" ]]; then
 	echo "Não é possível fazer o merge do branch master"
 	exit 1	
