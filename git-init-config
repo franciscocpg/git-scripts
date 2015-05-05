@@ -42,7 +42,9 @@ changeGitEnvVariable "Entre com seu usuário (Pode ser visualizado em Profile ->
 changeGitEnvVariable "Entre o token privado (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GITLAB_TOKEN"
 changeGitEnvVariable "" "TIDEXA_GIT_URL" "acessa"
 changeGitEnvVariable "" "TIDEXA_GITLAB_DOMAIN" "git.tidexa-es.com"
-changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" "https://"'$TIDEXA_GITLAB_DOMAIN'":9443/api/v3"
+changeGitEnvVariable "" "TIDEXA_GITLAB_API_HOST" "https://"'$TIDEXA_GITLAB_DOMAIN'":9443"
+changeGitEnvVariable "" "TIDEXA_GITLAB_API_PATH" "/api/v3"
+changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" '$TIDEXA_GITLAB_API_HOST$TIDEXA_GITLAB_API_PATH'
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
 changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
