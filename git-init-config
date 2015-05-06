@@ -3,6 +3,9 @@
 CHANGE="$1"
 BASH_RC=~/.bashrc
 
+# Importação
+. utils.sh
+
 changeGitProperty() {
 	local question="$1"
 	local gitProperty="$2"
@@ -49,6 +52,8 @@ changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
 changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
 changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
+#
+appendToBashRC "TIDEXA_GIT_GLOBAL_ASSIGNEE_ID" "5"
 git config --global push.default simple
 # Diff tool meld
 git config --global diff.tool meld

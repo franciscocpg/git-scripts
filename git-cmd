@@ -6,6 +6,7 @@ CLEAR="$4"
 PRINT_PATH_ONLY="$5"
 BEFORE_EXEC="$6"
 PRINT_CMD="$7"
+AFTER_EXEC="$8"
 if [[ -z "$PRINT_CMD" ]]; then
   PRINT_CMD="true"
 fi
@@ -26,13 +27,13 @@ printCmd() {
 
 gitCmdExec() {
   if [[ "$CMD" != "test-commit" ]]; then
-    if [[ -f "$BEFORE_EXEC" ]]; then
-      echo "Executando $BEFORE_EXEC"
-      ./$BEFORE_EXEC
-    fi
     local print="$1"
     if [[ "$print" = "true" ]]; then
       printCmd
+    fi
+    if [[ -f "$BEFORE_EXEC" ]]; then
+      echo "Executando $BEFORE_EXEC"
+      ./$BEFORE_EXEC
     fi
     if [ "$CMD_ARGS" != "" ]
     then
@@ -48,6 +49,9 @@ gitCmdExec() {
     fi
   fi
   RETURN_STATUS=$?
+  if [[ "$RETURN_STATUS" = "0" && -f "$AFTER_EXEC" ]]; then
+    ./$AFTER_EXEC
+  fi
 }
 
 beforePush() {

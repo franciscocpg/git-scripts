@@ -45,7 +45,7 @@ appendToBashRC() {
 		includePath="false"
 	fi
 	if [[ -z "$replace" ]]; then
-		replace="false"
+		replace="true"
 	fi
 	CONTAINS=$(cat $BASH_RC | grep $variable)
 	if [[ -z "$CONTAINS" ]]; then
