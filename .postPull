@@ -1,0 +1,2 @@
+echo "Executando git-init-config"
+./git-init-config

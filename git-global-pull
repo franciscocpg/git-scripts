@@ -5,5 +5,5 @@ git-init-config
 GIT_REPO_PATH="$1"
 CLEAR="$2"
 
-git-cmd pull "-v --no-edit $TIDEXA_GIT_GLOBAL_NAMESPACE master" "$GIT_REPO_PATH" "$CLEAR" "" ".prePull"
+git-cmd pull "-v --no-edit $TIDEXA_GIT_GLOBAL_NAMESPACE master" "$GIT_REPO_PATH" "$CLEAR" "" ".prePull" "" ".postPull"
 git-push "$GIT_REPO_PATH" "" "false"
