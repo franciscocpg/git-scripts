@@ -52,11 +52,13 @@ changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
 changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
 changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
-#
+# Id do aprovador de MRs
 appendToBashRC "TIDEXA_GIT_GLOBAL_ASSIGNEE_ID" "5"
 git config --global push.default simple
 # Diff tool meld
 git config --global diff.tool meld
+# Não verifica certificado
+git config http.sslVerify false
 # Mantém as credencias em cache por uma hora. Utilizado em https para não ficar pedindo
-# usuário e senha toda hora
+# usuário e senha a cada requisição.
 git config --global credential.helper 'cache --timeout=3600'
