@@ -58,7 +58,7 @@ git config --global push.default simple
 # Diff tool meld
 git config --global diff.tool meld
 # Não verifica certificado
-git config http.sslVerify false
+git config --global http.sslVerify false
 # Mantém as credencias em cache por uma hora. Utilizado em https para não ficar pedindo
 # usuário e senha a cada requisição.
 git config --global credential.helper 'cache --timeout=3600'
