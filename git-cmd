@@ -148,7 +148,15 @@ if [[ "$GIT_REPO_PATH" = "" ]]; then
       gitCmd "$dir"
   done
 else
-  gitCmd "$GIT_REPO_PATH"
+  if [[ -d  "$GIT_REPO_PATH" ]]; then
+    gitCmd "$GIT_REPO_PATH"
+  elif [[ -f "$GIT_REPO_PATH" ]]; then
+    while read -r gitRepoPath
+    do
+      gitCmd $gitRepoPath
+    done < "$GIT_REPO_PATH"
+  fi
+  
 fi
 
 if [[ -z "$OUT" ]]; then
