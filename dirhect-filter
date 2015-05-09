@@ -2,5 +2,6 @@ java-common-lib
 java-common-resources-lib
 java-common-zk
 java-common-resources-zk
+java-common-ejb
 java-dirhect-main
 java-dirhect-pr
