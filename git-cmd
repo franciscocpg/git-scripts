@@ -57,15 +57,12 @@ gitCmdExec() {
 beforePush() {
   GIT_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   GIT_REMOTE_REPO="origin"
-}
-
-afterPush() {
   GIT_CURRENT_REMOTE_BRANCH=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
   GIT_REMOTE_BRANCH="$GIT_REMOTE_REPO/$GIT_CURRENT_BRANCH"
   if [[ "$GIT_CURRENT_REMOTE_BRANCH" != "$GIT_REMOTE_BRANCH" ]]; then
     echo "Setando branch para $GIT_REMOTE_BRANCH"
     git push -u "$GIT_REMOTE_REPO" "$GIT_CURRENT_BRANCH"
-    exit 0
+    exit $?
   fi
 }
 
