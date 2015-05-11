@@ -131,9 +131,6 @@ gitCmd() {
       else
         OUT=" "
         gitCmdExec "true"
-        if [[ "$CMD" = "push" ]]; then
-          afterPush
-        fi
       fi
     fi
   fi
