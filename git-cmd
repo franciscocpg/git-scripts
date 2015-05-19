@@ -78,7 +78,7 @@ gitCmd() {
 		  printCmd
 		  gitCmdExec
 		fi
-	  else
+	else
 		execGitCmd="true"
 		if [[ "$CMD" = "push" && "$CMD_ARGS" != *"--delete"*  ]]; then
 		  outputCmd=$(git status -s -b)
@@ -134,8 +134,8 @@ gitCmd() {
 			gitCmdExec "true"
 		  fi
 		fi
-	  fi
-	  cd ..
+	fi
+	cd ..
   fi
 }
 
