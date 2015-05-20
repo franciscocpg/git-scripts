@@ -51,7 +51,7 @@ appendToBashRC() {
 	if [[ -z "$CONTAINS" ]]; then
 		echo -e "\nexport $variable=$value" >> $BASH_RC
 		if [[ "$includePath" = "true" ]]; then
-			echo 'export PATH=${PATH}:$'$variable'/bin' >> $BASH_RC	
+			echo 'export PATH=${PATH}:$'$variable >> $BASH_RC	
 		fi
 	elif [[ "$replace" = "true" ]]; then
 		CONTENTS=$(cat $BASH_RC)
