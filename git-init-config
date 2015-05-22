@@ -62,5 +62,7 @@ git config --global http.sslVerify false
 # Mantém as credencias em cache por uma hora. Utilizado em https para não ficar pedindo
 # usuário e senha a cada requisição.
 git config --global credential.helper 'cache --timeout=3600'
+# Quebra de linha deve ser a do linux
+git config --global core.autocrlf input
 # Veja https://git.tidexa-es.com:9443/global-private/infraestrutura-ti/issues/1
 git config --global http.postBuffer 1048576000
