@@ -3,4 +3,5 @@ dist/
 **/**/nbproject/private
 **/**/javadoc
 **/**/target
+cp.txt
 build-impl.xml~
