@@ -12,4 +12,5 @@ if [[ "$STATUS" == "0" ]]; then
 	git-cmd commit "-m $MESSAGE" "$GIT_REPO_PATH" "$CLEAR"
 else
 	echo "$OUTPUT"
+	exit "$STATUS"
 fi

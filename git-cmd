@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# varíaveis
 CMD="$1"
 CMD_ARGS="$2"
 GIT_REPO_PATH="$3"
@@ -7,6 +9,9 @@ PRINT_PATH_ONLY="$5"
 BEFORE_EXEC="$6"
 PRINT_CMD="$7"
 AFTER_EXEC="$8"
+FORCE_PUSH="false"
+
+
 if [[ -z "$PRINT_CMD" ]]; then
   PRINT_CMD="true"
 fi
@@ -106,76 +111,86 @@ gitCmd() {
   local path="$1"
   if [[ -e "$path" ]]; then
 	cd "$path"
-	if [[ "$CMD" = "diff" && "$PRINT_PATH_ONLY" != "true" ]]; then
-		# Diff imprime colorido
-		outputCmd=$(gitCmdExec)
-		if [[ -n "$outputCmd" ]]; then
-		  OUT="$OUT$outputCmd"
-		  printCmd
-		  gitCmdExec
+	# É um repositório git
+	if [[ -e ".git" ]]; then
+		if [[ "$CMD" = "diff" && "$PRINT_PATH_ONLY" != "true" ]]; then
+			# Diff imprime colorido
+			outputCmd=$(gitCmdExec)
+			if [[ -n "$outputCmd" ]]; then
+			  OUT="$OUT$outputCmd"
+			  printCmd
+			  gitCmdExec
+			fi
+		else
+			execGitCmd="true"
+			if [[ "$CMD" = "push" && "$CMD_ARGS" != *"--delete"*  ]]; then
+			  outputCmd=$(git status -s -b)
+			  # Pega a primeira linha da saida
+			  outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
+			  # Não executa o push se a saida não contém o caracter [
+			  if [[ "$FORCE_PUSH" = "false" && "$outputCmd" != *"["* ]]
+			  then
+				execGitCmd="false"
+			  fi
+			fi
+			if [[ "$CMD" = "test-commit" ]]; then
+			  normalizeProjectProperties
+			  outputCmd=$(git status -s -b)
+			  # Pega a quantidade de linhas na saida
+			  outputCmdLines=$(echo -e "$outputCmd" | wc -l)
+			  # Não executa o commit se a saida tiver menos de 2 linhas
+			  if [[ $outputCmdLines -lt 2 ]]
+			  then
+				execGitCmd="false"
+			  fi
+			fi
+			if [[ "$execGitCmd" = "true" ]]; then
+			  if [[ "$CMD" = "push" ]]; then
+				beforePush
+			  fi
+			  # Só mostra status do que alterou
+			  if [[ "$CMD" = "status" ]]; then
+				outputCmd=$(gitCmdExec)
+				if [[ "$outputCmd" != "## master...origin/master" ]]; then
+				   if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
+					OUT="$OUT$path\n"
+				  else
+					OUT="$OUT$(printCmd)"
+					OUT="$OUT$outputCmd"
+				  fi
+				fi
+			  # Só mostra diferença do que tem diferença
+			  elif [[ "$CMD" = "diff" ]]; then
+				outputCmd=$(gitCmdExec)
+				local status="$?"
+				if [[ "$status" != "0" ]]; then
+				  OUT="\nErro: $path$OUT"
+				elif [[ -n "$outputCmd" ]]; then
+				  if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
+					OUT="$OUT$path\n"
+				  else
+					OUT="$OUT$(printCmd)\n"
+					OUT="$OUT$outputCmd"
+				  fi
+				fi
+			  else
+				OUT=" "
+				gitCmdExec "true"
+			  fi
+			fi
 		fi
 	else
-		execGitCmd="true"
-		if [[ "$CMD" = "push" && "$CMD_ARGS" != *"--delete"*  ]]; then
-		  outputCmd=$(git status -s -b)
-		  # Pega a primeira linha da saida
-		  outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
-		  # Não executa o push se a saida não contém o caracter [
-		  if [[ "$outputCmd" != *"["* ]]
-		  then
-			execGitCmd="false"
-		  fi
-		fi
-		if [[ "$CMD" = "test-commit" ]]; then
-		  normalizeProjectProperties
-		  outputCmd=$(git status -s -b)
-		  # Pega a quantidade de linhas na saida
-		  outputCmdLines=$(echo -e "$outputCmd" | wc -l)
-		  # Não executa o commit se a saida tiver menos de 2 linhas
-		  if [[ $outputCmdLines -lt 2 ]]
-		  then
-			execGitCmd="false"
-		  fi
-		fi
-		if [[ "$execGitCmd" = "true" ]]; then
-		  if [[ "$CMD" = "push" ]]; then
-			beforePush
-		  fi
-		  # Só mostra status do que alterou
-		  if [[ "$CMD" = "status" ]]; then
-			outputCmd=$(gitCmdExec)
-			if [[ "$outputCmd" != "## master...origin/master" ]]; then
-			   if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
-				OUT="$OUT$path\n"
-			  else
-				OUT="$OUT$(printCmd)"
-				OUT="$OUT$outputCmd"
-			  fi
-			fi
-		  # Só mostra diferença do que tem diferença
-		  elif [[ "$CMD" = "diff" ]]; then
-			outputCmd=$(gitCmdExec)
-			local status="$?"
-			if [[ "$status" != "0" ]]; then
-			  OUT="\nErro: $path$OUT"
-			elif [[ -n "$outputCmd" ]]; then
-			  if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
-				OUT="$OUT$path\n"
-			  else
-				OUT="$OUT$(printCmd)\n"
-				OUT="$OUT$outputCmd"
-			  fi
-			fi
-		  else
-			OUT=" "
-			gitCmdExec "true"
-		  fi
-		fi
+		echo "Não é um repositório git: $path"
 	fi
 	cd ..
   fi
 }
 
+# execução programa
+if [[ "$CMD" = "force-push"  ]]; then
+	CMD="push"
+	FORCE_PUSH="true"
+fi
 if [[ "$GIT_REPO_PATH" = "" ]]; then
   for dir in */; do
       gitCmd "$dir"

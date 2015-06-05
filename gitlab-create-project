@@ -4,6 +4,7 @@ git-init-config
 
 GIT_GLOBAL_NAMESPACE_ID="$1"
 NAME="$2"
+INIT="$3"
 
 
 # Importa chamadas api
@@ -70,11 +71,21 @@ if [[ -n "$NAME" ]]; then
 
 		ID=$(getJSON id)
 		if [[ "$ID" != "null" ]]; then
-			SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
-			JSON_RESP=$(gitlab-list-groups "$GIT_GLOBAL_NAMESPACE_ID")
-			GIT_GLOBAL_NAMESPACE=$(getJSON name)
-			echo "GIT_GLOBAL_NAMESPACE:$GIT_GLOBAL_NAMESPACE"
-			git-clone $SSH_URL_TO_REPO "$GIT_GLOBAL_NAMESPACE" 
+			if [[ "$INIT" = "true" ]]; then
+				git init
+				git remote add "$TIDEXA_GIT_GLOBAL_NAMESPACE" "$SSH_URL_TO_REPO"
+				SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
+				git remote add "origin" "$SSH_URL_TO_REPO"
+				git-global-pull .
+				# Configura o branch atual para origin/master
+				git push -u origin master
+			else
+				SSH_URL_TO_REPO=$(getJSON ssh_url_to_repo)
+				JSON_RESP=$(gitlab-list-groups "$GIT_GLOBAL_NAMESPACE_ID")
+				GIT_GLOBAL_NAMESPACE=$(getJSON name)
+				echo "GIT_GLOBAL_NAMESPACE:$GIT_GLOBAL_NAMESPACE"
+				git-clone $SSH_URL_TO_REPO "$GIT_GLOBAL_NAMESPACE" 
+			fi
 		fi
 	fi
 fi

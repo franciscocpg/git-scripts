@@ -2,5 +2,10 @@
 GIT_REPO_PATH="$1"
 GIT_REMOTE_REPO="$2"
 CLEAR="$3"
+# Aceita push ou force-push
+CMD="$4"
+if [[ -z "$CMD" ]]; then
+	CMD="push"
+fi
 
-git-cmd push "-v $GIT_REMOTE_REPO $GIT_CURRENT_BRANCH" "$GIT_REPO_PATH" "$CLEAR" "" ".prePush"
+git-cmd "$CMD" "-v $GIT_REMOTE_REPO $GIT_CURRENT_BRANCH" "$GIT_REPO_PATH" "$CLEAR" "" ".prePush"
