@@ -1,0 +1,15 @@
+#!/bin/bash
+# Variáveis
+GIT_REPO_PATH="$1"
+
+# Programa
+if [[ -z "$GIT_REPO_PATH" ]]; then
+	echo "Informe um diretório"
+	exit 1
+fi
+
+cd "$GIT_REPO_PATH"
+PROJECT_NAME=$(basename $(pwd))
+# echo "$PATH"
+gitlab-create-project "" "$PROJECT_NAME" "true" 
+cd -
