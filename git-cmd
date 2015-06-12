@@ -103,7 +103,9 @@ beforePush() {
   if [[ "$GIT_CURRENT_REMOTE_BRANCH" != "$GIT_REMOTE_BRANCH" ]]; then
     echo "Setando branch para $GIT_REMOTE_BRANCH"
     git push -u "$GIT_REMOTE_REPO" "$GIT_CURRENT_BRANCH"
-    exit $?
+    if [[ "$GIT_REPO_PATH" != "" ]]; then
+    	exit $?
+    fi
   fi
 }
 
