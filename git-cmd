@@ -112,7 +112,7 @@ gitCmd() {
   if [[ -e "$path" ]]; then
 	cd "$path"
 	# É um repositório git
-	if [[ -e ".git" ]]; then
+	if [[ -e ".git" || "$GIT_REPO_PATH" != "" ]]; then
 		if [[ "$CMD" = "diff" && "$PRINT_PATH_ONLY" != "true" ]]; then
 			# Diff imprime colorido
 			outputCmd=$(gitCmdExec)
