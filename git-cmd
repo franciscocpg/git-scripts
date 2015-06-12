@@ -103,7 +103,9 @@ beforePush() {
   if [[ "$GIT_CURRENT_REMOTE_BRANCH" != "$GIT_REMOTE_BRANCH" ]]; then
     echo "Setando branch para $GIT_REMOTE_BRANCH"
     git push -u "$GIT_REMOTE_REPO" "$GIT_CURRENT_BRANCH"
-    exit $?
+    if [[ "$GIT_REPO_PATH" != "" ]]; then
+    	exit $?
+    fi
   fi
 }
 
@@ -112,7 +114,7 @@ gitCmd() {
   if [[ -e "$path" ]]; then
 	cd "$path"
 	# É um repositório git
-	if [[ -e ".git" ]]; then
+	if [[ -e ".git" || "$GIT_REPO_PATH" != "" ]]; then
 		if [[ "$CMD" = "diff" && "$PRINT_PATH_ONLY" != "true" ]]; then
 			# Diff imprime colorido
 			outputCmd=$(gitCmdExec)
