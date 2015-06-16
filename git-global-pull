@@ -6,4 +6,8 @@ GIT_REPO_PATH="$1"
 CLEAR="$2"
 
 git-cmd pull "-v --no-edit $TIDEXA_GIT_GLOBAL_NAMESPACE master" "$GIT_REPO_PATH" "$CLEAR" "" ".prePull" "" ".postPull"
-git-push "$GIT_REPO_PATH" "" "false"
+RETURN="$?"
+echo "Saida: $RETURN"
+if [[ "$RETURN" -le 1 ]]; then
+	git-push "$GIT_REPO_PATH" "" "false"
+fi
