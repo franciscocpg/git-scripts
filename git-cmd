@@ -90,6 +90,9 @@ gitCmdExec() {
     fi
   fi
   RETURN_STATUS=$?
+  if [[ "$RETURN_STATUS" != "0"  ]]; then
+  	exit $RETURN_STATUS
+  fi
   if [[ "$RETURN_STATUS" = "0" && -f "$AFTER_EXEC" ]]; then
     ./$AFTER_EXEC
   fi
