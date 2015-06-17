@@ -90,6 +90,10 @@ gitCmdExec() {
     fi
   fi
   RETURN_STATUS=$?
+  if [[ "$RETURN_STATUS" -gt 1 ]]; then
+  	echo "Saida: $RETURN_STATUS"
+  	exit $RETURN_STATUS
+  fi
   if [[ "$RETURN_STATUS" = "0" && -f "$AFTER_EXEC" ]]; then
     ./$AFTER_EXEC
   fi
