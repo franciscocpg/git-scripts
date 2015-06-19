@@ -89,7 +89,7 @@ gitCmdExec() {
       if [[ "$CMD" = "create-mr" ]]; then
 		gitlab-create-mr .
   	  else
-  	     git $CMD
+  	    git $CMD
   	  fi
     fi
   fi
