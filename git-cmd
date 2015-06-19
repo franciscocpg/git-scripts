@@ -86,7 +86,11 @@ gitCmdExec() {
         git $CMD ${args[@]}
       fi
     else
-      git $CMD
+      if [[ "$CMD" = "create-mr" ]]; then
+		gitlab-create-mr .
+  	  else
+  	    git $CMD
+  	  fi
     fi
   fi
   RETURN_STATUS=$?
