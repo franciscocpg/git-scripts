@@ -64,6 +64,9 @@ printCmd() {
 }
 
 gitCmdExec() {
+	if [[ "$CMD" = "create-mr" ]]; then
+		gitlab-create-mr .
+	fi
   if [[ "$CMD" != "test-commit" ]]; then
     local print="$1"
     if [[ "$print" = "true" ]]; then
