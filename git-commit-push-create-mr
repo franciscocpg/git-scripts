@@ -1,8 +1,4 @@
 GIT_REPO_PATH="$1"
 git-add "$GIT_REPO_PATH"
 git-cmd-commit "$GIT_REPO_PATH" "false"
-git-push "$GIT_REPO_PATH" "" "false"
-# Só pode gerar mr do que foi push, se nao vai tentar todos os diretórios
-# Sugestão é gravar num tmp o que foi feito push no git-cmd
-# e depois ler o tmp pra chamar o comando abaixo
-git-cmd "create-mr" "" "$GIT_REPO_PATH" "false"
+git-push "$GIT_REPO_PATH" "" "false" "push-create-mr"

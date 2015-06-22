@@ -139,3 +139,11 @@ readPassword() {
 
 	echo $PASSWORD
 }
+
+# Verifique se o array ($2) contém o elemento ($1)
+# O 2º elemento deve ser o array por causa da expansão
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
