@@ -10,7 +10,11 @@ BEFORE_EXEC="$6"
 PRINT_CMD="$7"
 AFTER_EXEC="$8"
 FORCE_PUSH="false"
+EXEC_ARRAY=()
+EXEC_ARRAY_IDX=0
 
+# Importação
+. utils.sh
 
 if [[ -z "$PRINT_CMD" ]]; then
   PRINT_CMD="true"
@@ -76,21 +80,23 @@ gitCmdExec() {
       echo "Executando $BEFORE_EXEC"
       ./$BEFORE_EXEC
     fi
+    local cmd
+    if [[ "$CMD" = "push-create-mr" ]]; then
+    	cmd="push"
+    else
+    	cmd="$CMD"
+    fi
     if [ "$CMD_ARGS" != "" ]
     then
       args=( "$CMD_ARGS" )
       if [[ "$CMD_ARGS" = "-m"* ]]
       then
-        git $CMD "${args[@]}"
+        git $cmd "${args[@]}"
       else 
-        git $CMD ${args[@]}
+        git $cmd ${args[@]}
       fi
     else
-      if [[ "$CMD" = "create-mr" ]]; then
-		gitlab-create-mr .
-  	  else
-  	    git $CMD
-  	  fi
+  		git $cmd
     fi
   fi
   RETURN_STATUS=$?
@@ -99,8 +105,16 @@ gitCmdExec() {
   	exit $RETURN_STATUS
   fi
   if [[ "$RETURN_STATUS" = "0" && -f "$AFTER_EXEC" ]]; then
+  	echo "Executando $AFTER_EXEC"
     ./$AFTER_EXEC
   fi
+  if [[ "$CMD" = "push-create-mr" ]]; then
+  	gitlab-create-mr .
+  fi
+}
+
+isPush() {
+	[[ "$CMD" = "push" || "$CMD" = "push-create-mr" ]]
 }
 
 beforePush() {
@@ -119,7 +133,10 @@ beforePush() {
 
 gitCmd() {
   local path="$1"
-  if [[ -e "$path" ]]; then
+  containsElement "$path" "${EXEC_ARRAY[@]}"
+  local executed="$?"
+  # Ainda não foi executado
+  if [[ -e "$path" && "$executed" == "1" ]]; then
 	cd "$path"
 	# É um repositório git
 	if [[ -e ".git" || "$GIT_REPO_PATH" != "" ]]; then
@@ -133,7 +150,7 @@ gitCmd() {
 			fi
 		else
 			execGitCmd="true"
-			if [[ "$CMD" = "push" && "$CMD_ARGS" != *"--delete"*  ]]; then
+			if isPush && [[ "$CMD_ARGS" != *"--delete"*  ]]; then
 			  outputCmd=$(git status -s -b)
 			  # Pega a primeira linha da saida
 			  outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
@@ -155,7 +172,7 @@ gitCmd() {
 			  fi
 			fi
 			if [[ "$execGitCmd" = "true" ]]; then
-			  if [[ "$CMD" = "push" ]]; then
+			  if isPush; then
 				beforePush
 			  fi
 			  # Só mostra status do que alterou
@@ -192,6 +209,8 @@ gitCmd() {
 	else
 		echo "Não é um repositório git: $path"
 	fi
+	EXEC_ARRAY[EXEC_ARRAY_IDX]="$path"
+	EXEC_ARRAY_IDX=$((EXEC_ARRAY_IDX + 1))
 	cd ..
   fi
 }
