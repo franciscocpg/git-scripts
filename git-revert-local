@@ -1,4 +1,5 @@
 #!/bin/bash
 # Abandona as alterações locais (não inclui novos arquivos)
 folder="$1"
-git-cmd reset "--hard" "$folder"
+CLEAR="$2"
+git-cmd reset "--hard" "$folder" "$CLEAR"
