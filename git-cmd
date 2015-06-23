@@ -109,6 +109,7 @@ gitCmdExec() {
     ./$AFTER_EXEC
   fi
   if [[ "$CMD" = "push-create-mr" ]]; then
+  	echo "Criando MR"
   	gitlab-create-mr .
   fi
 }
