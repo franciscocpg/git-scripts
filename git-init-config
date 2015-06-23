@@ -53,7 +53,7 @@ changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
 changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
 # Id do aprovador de MRs
-appendToBashRC "TIDEXA_GIT_GLOBAL_ASSIGNEE_ID" "5"
+appendToBashRC "TIDEXA_GIT_GLOBAL_ASSIGNEE_ID" "8"
 git config --global push.default simple
 # Diff tool meld
 git config --global diff.tool meld
