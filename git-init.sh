@@ -30,4 +30,9 @@ if [[ -z "$CONTAINS_GIT_TIDEXA_SCRIPTS" ]]; then
 	echo 'PATH=${PATH}:$GIT_TIDEXA_SCRIPTS' >> $BASH_RC	
 fi
 
+# Instalação do certificado GITLAB
+sudo wget https://www.startssl.com/certs/sub.class1.server.ca.pem -O /usr/share/ca-certificates/mozilla/StartCom_Class_1_Primary_Intermediate_Server_CA.crt
+sudo sh -c 'echo "mozilla/StartCom_Class_1_Primary_Intermediate_Server_CA.crt" >> /etc/ca-certificates.conf'
+sudo update-ca-certificates
+
 ./git-init-config

@@ -6,7 +6,7 @@ callGitlabAPI() {
 	if [[ -z "$filter" ]]; then
 		filter="."
 	fi
-	curl -k\
+	curl \
 		 -H "Content-Type: application/json" \
 		 -H "PRIVATE-TOKEN: $TIDEXA_GITLAB_TOKEN" \
 		 -d "$jsonData"\
