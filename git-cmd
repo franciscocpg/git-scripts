@@ -32,6 +32,10 @@ git-init-config
 normalizeProjectProperties() {
 	DEFAULT_VALUE='${j2ee.server.middleware}/mq/lib/jaxm-api.jar\:${j2ee.server.home}/modules/endorsed/javax.annotation-api.jar\:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar\:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar\:${j2ee.server.home}/modules/javax.mail.jar\:${j2ee.server.home}/modules/javax.websocket-api.jar\:${j2ee.server.home}/modules/javax.batch-api.jar\:${j2ee.server.home}/modules/javax.security.auth.message-api.jar\:${j2ee.server.home}/modules/javax.json.jar\:${j2ee.server.home}/modules/javax.enterprise.concurrent-api.jar\:${j2ee.server.home}/modules/javax.xml.registry-api.jar\:${j2ee.server.home}/modules/javax.enterprise.concurrent.jar\:${j2ee.server.home}/modules/javax.management.j2ee-api.jar\:${j2ee.server.home}/modules/jaxb-osgi.jar\:${j2ee.server.home}/modules/javax.interceptor-api.jar\:${j2ee.server.home}/modules/weld-osgi-bundle.jar\:${j2ee.server.home}/modules/javax.resource-api.jar\:${j2ee.server.home}/modules/javax.ejb-api.jar\:${j2ee.server.home}/modules/javax.faces.jar\:${j2ee.server.home}/modules/javax.jms-api.jar\:${j2ee.server.home}/modules/javax.security.jacc-api.jar\:${j2ee.server.home}/modules/javax.servlet.jsp.jstl.jar\:${j2ee.server.home}/modules/javax.servlet-api.jar\:${j2ee.server.home}/modules/javax.enterprise.deploy-api.jar\:${j2ee.server.home}/modules/javax.xml.rpc-api.jar\:${j2ee.server.home}/modules/javax.el.jar\:${j2ee.server.home}/modules/bean-validator.jar\:${j2ee.server.home}/modules/javax.persistence.jar\:${j2ee.server.home}/modules/javax.transaction-api.jar\:${j2ee.server.home}/modules/javax.inject.jar\:${j2ee.server.home}/modules/webservices-osgi.jar\:${j2ee.server.home}/modules/javax.ws.rs-api.jar\:${j2ee.server.home}/modules/javax.servlet.jsp.jstl-api.jar\:${j2ee.server.home}/modules/javax.servlet.jsp.jar\:${j2ee.server.home}/modules/javax.servlet.jsp-api.jar'
 	KEY="j2ee.platform.classpath"
+	WS_GEN_WRONG='j2ee.platform.wsgen.classpath=${j2ee.server.home}/modules/webservices-osgi.jar:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar:${j2ee.server.home}/modules/jaxb-osgi.jar:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
+	WS_GEN_CORRECT='j2ee.platform.wsgen.classpath=${j2ee.server.home}/modules/webservices-osgi.jar\:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar\:${j2ee.server.home}/modules/jaxb-osgi.jar\:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
+	WS_IMPORT_WRONG='j2ee.platform.wsimport.classpath=${j2ee.server.home}/modules/webservices-osgi.jar:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar:${j2ee.server.home}/modules/jaxb-osgi.jar:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
+	WS_IMPORT_CORRECT='j2ee.platform.wsimport.classpath=${j2ee.server.home}/modules/webservices-osgi.jar\:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar\:${j2ee.server.home}/modules/jaxb-osgi.jar\:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
 	for file in $(find . -name "project.properties"); do
 		OLD_VALUE=$(cat "$file" | grep $KEY)
 		if [[ -n "$OLD_VALUE" ]]; then
@@ -56,6 +60,18 @@ normalizeProjectProperties() {
 					echo "$CONTENTS" > $file
 				fi
 			fi
+		fi
+		CONTAINS=$(cat "$file" | grep $WS_GEN_WRONG)
+		if [[ -n "$CONTAINS" ]]; then
+			CONTENTS=$(cat "$file")
+			CONTENTS=${CONTENTS/"$WS_GEN_WRONG"/$WS_GEN_CORRECT}
+			echo "$CONTENTS" > $file
+		fi
+		CONTAINS=$(cat "$file" | grep $WS_IMPORT_WRONG)
+		if [[ -n "$CONTAINS" ]]; then
+			CONTENTS=$(cat "$file")
+			CONTENTS=${CONTENTS/"$WS_IMPORT_WRONG"/$WS_IMPORT_CORRECT}
+			echo "$CONTENTS" > $file
 		fi
 	done
 }
