@@ -16,7 +16,6 @@ installSoft meld
 
 # Ignorar globalmente
 # cp .gitignore_global ~ 
-# Testar com link simbólico ao invés de copiar
 if [[ ! -e "$GIT_IGNORE_GLOBAL_HOME" ]]; then
 	ln -s "$FOLDER/.gitignore_global" "$GIT_IGNORE_GLOBAL_HOME"
 	git config --global core.excludesfile "$GIT_IGNORE_GLOBAL_HOME"
@@ -35,4 +34,4 @@ sudo wget https://www.startssl.com/certs/sub.class1.server.ca.pem -O /usr/share/
 sudo sh -c 'echo "mozilla/StartCom_Class_1_Primary_Intermediate_Server_CA.crt" >> /etc/ca-certificates.conf'
 sudo update-ca-certificates
 
-./git-init-config
+./git-init-config "false" "$FOLDER"

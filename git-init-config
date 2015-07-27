@@ -1,6 +1,7 @@
 #!/bin/bash -i
 # CHANGE indica se está trocando ou criando/verificando
 CHANGE="$1"
+FOLDER="$2"
 BASH_RC=~/.bashrc
 
 # Importação
@@ -27,7 +28,7 @@ changeGitEnvVariable() {
 	local gitEnvVariable="$2"
 	local gitEnvVariableValue="$3"
 	if [[ "$CHANGE" != "true" ]]; then
-		CONTAINS_GIT_TIDEXA_VARIABLE=$(cat $BASH_RC | grep $gitEnvVariable)
+		CONTAINS_GIT_TIDEXA_VARIABLE=$(cat $BASH_RC | grep $gitEnvVariable=)
 		if [[ -n "$CONTAINS_GIT_TIDEXA_VARIABLE" ]]; then
 			return;
 		fi
@@ -52,6 +53,24 @@ changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
 changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
 changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
 changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
+# Inicia worspace
+if [ -n "$FOLDER" ]; then
+	chd ..
+	currentFolder=$(pwd)
+	gitlabUser=$(basename $currentFolder)
+	changeGitEnvVariable "" "TIDEXA_GITLAB_USER" "$gitlabUser"
+	chd -
+	chd ../../../..
+	currentFolder=$(pwd)
+	gitlabWS=$currentFolder
+	changeGitEnvVariable "" "TIDEXA_WS" "$gitlabWS"
+	chd -
+	changeGitEnvVariable "" "TIDEXA_GIT" '$TIDEXA_WS/git'
+	changeGitEnvVariable "" "TIDEXA_SVN" '$TIDEXA_WS/svn'
+	changeGitEnvVariable "" "TIDEXA_GITLAB" '$TIDEXA_GIT/$TIDEXA_GITLAB_DOMAIN'
+	changeGitEnvVariable "" "TIDEXA_GITLAB_USER_PATH" '$TIDEXA_GITLAB/$TIDEXA_GITLAB_USER'
+fi
+
 # Id do aprovador de MRs
 appendToBashRC "TIDEXA_GIT_GLOBAL_ASSIGNEE_ID" "8"
 git config --global push.default simple

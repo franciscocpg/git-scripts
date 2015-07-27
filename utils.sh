@@ -141,9 +141,62 @@ readPassword() {
 }
 
 # Verifique se o array ($2) contém o elemento ($1)
-# O 2º elemento deve ser o array por causa da expansão
+# O 2º parâmetro deve ser o array por causa da expansão
 containsElement () {
   local e
   for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
   return 1
+}
+
+# Faz um eval dos argumentos recebidos na execução do programa utilizando getopts.
+# A variável OPTS deve ter sido setada na execução do programa.
+# Exemplo de variável: 
+# OPTS=vf:do: 
+# Nesse exemplo os flags v e d não aceitam argumentos enquanto f e o aceitam (:)
+# Um programa foo que declara com o seguinte código: 
+# 
+# . utils.sh
+# OPTS=vf:do:
+# evalArgs "$@"
+# echo "o: $o"
+# echo "f: $f"
+# echo "Flags: ${flags[@]}"
+# echo "Args: ${args[@]}"
+# 
+# e é chamado da seguinte maneira:
+# foo -v -f 1 -d -o 2 test1 test2
+# Imprime:
+# o: 2
+# f: 1
+# Flags: v d
+# Args: test1 test2
+evalArgs() {
+
+ 	local OPTIND
+ 	readopt='getopts $OPTS opt;rc=$?;[ $rc$opt == 0? ]&&exit 1;[ $rc == 0 ]||{ shift $[OPTIND-1];false; }'
+
+ 	flags=()
+	flagsIdx=0
+
+	# Enumerating options
+	while eval $readopt
+	do
+		if [[ -n "$OPTARG" ]]; then
+			eval "$opt=$OPTARG"
+		else
+			flags[flagsIdx]="$opt"
+			flagsIdx=$((flagsIdx + 1))
+		fi
+	done
+
+	args=()
+	argsIdx=0
+
+	# Enumerating arguments
+	for arg
+	do
+		args[argsIdx]="$arg"
+		argsIdx=$((argsIdx + 1))
+	done
+	
 }
