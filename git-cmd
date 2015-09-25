@@ -17,11 +17,24 @@ EXEC_ARRAY_IDX=0
 . utils.sh
 
 if [[ -z "$PRINT_CMD" ]]; then
-  PRINT_CMD="true"
+	PRINT_CMD="true"
 fi
 OUT=""
 if [[ "$CLEAR" != "false" ]]; then
-  clear
+	clear
+fi
+# Se contém espaços, divide os argumentos
+if [[ "$GIT_REPO_PATH" == *" "* ]]; then
+	IFS=' ' read -a args <<< "$GIT_REPO_PATH"
+	for index in "${!args[@]}"
+	do
+		if [[ "$index" == "0" ]]; 
+		then
+			GIT_REPO_PATH="${args[index]}"
+		else
+	    	CMD_ARGS="$CMD_ARGS ${args[index]}"
+		fi
+	done
 fi
 RETURN_STATUS="0"
 # Verifica se as configurações estão iniciadas
@@ -79,7 +92,7 @@ normalizeProjectProperties() {
 printCmd() {
   if [[ "$PRINT_CMD" = "true" ]]; then
     echo -e "\n=========================================="
-    echo "$CMD $CMD_ARGS $path"
+    echo "$CMD $CMD_ARGS $path $ARGS"
   fi
 }
 

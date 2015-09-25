@@ -1,4 +1,5 @@
 #!/bin/bash
 GIT_REPO_PATH="$1"
-
-git-cmd pull "-v --no-edit" "$GIT_REPO_PATH"
+REMOTE="$2"
+BRANCH="$3"
+git-cmd pull "-v --no-edit" "$GIT_REPO_PATH $REMOTE $BRANCH"
