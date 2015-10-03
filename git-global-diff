@@ -1,14 +1,45 @@
 #!/bin/bash -i
-GIT_REPO_PATH="$1"
-FETCH="$2"
-CLEAR="$3"
-PRINT_PATH_ONLY="$4"
+
+# Import
+. utils.sh
+
+# Opts
+OPTS=fcp
+evalArgs "$@"
+
+GIT_REPO_PATH="${args[0]}"
+if [[ "${#args[@]}" == "2" ]]; then
+	GIT_BRANCH="${args[1]}"
+else
+	GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"	
+fi
+
+FETCH="false"
+containsElement "f" "${flags[@]}"
+fetch="$?"
+if [[ "$fetch" == "0" ]]; then
+	FETCH="true"
+fi
+
+CLEAR=""
+containsElement "c" "${flags[@]}"
+clear="$?"
+if [[ "$clear" == "0" ]]; then
+	CLEAR="true"
+fi
+
+PRINT_PATH_ONLY=""
+containsElement "p" "${flags[@]}"
+print="$?"
+if [[ "$print" == "0" ]]; then
+	PRINT_PATH_ONLY="true"
+fi
 
 # Verifica se as configurações estão iniciadas
 git-init-config
 
 
 if [[ "$FETCH" != "false" ]]; then
-	git-cmd fetch "-v $TIDEXA_GIT_GLOBAL_NAMESPACE" "$GIT_REPO_PATH"
+	git-cmd fetch "-v $TIDEXA_GIT_GLOBAL_NAMESPACE $GIT_BRANCH" "$GIT_REPO_PATH"
 fi
-git-cmd diff "--stat origin/master $TIDEXA_GIT_GLOBAL_NAMESPACE/master" "$GIT_REPO_PATH" "$CLEAR" "$PRINT_PATH_ONLY" ""
+git-cmd diff "--stat origin/$GIT_BRANCH $TIDEXA_GIT_GLOBAL_NAMESPACE/$GIT_BRANCH" "$GIT_REPO_PATH" "$CLEAR" "$PRINT_PATH_ONLY" ""
