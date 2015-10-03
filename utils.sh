@@ -152,7 +152,7 @@ containsElement () {
 # A variável OPTS deve ter sido setada na execução do programa.
 # Exemplo de variável: 
 # OPTS=vf:do: 
-# Nesse exemplo os flags v e d não aceitam argumentos enquanto f e o aceitam (:)
+# Nesse exemplo os flags 'v' e 'd' não aceitam argumentos (portanto são flags) enquanto 'f' e 'o' aceitam (:)
 # Um programa foo que declara com o seguinte código: 
 # 
 # . utils.sh
