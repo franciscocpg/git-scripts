@@ -99,6 +99,14 @@ printCmd() {
 gitCmdExec() {
   if [[ "$CMD" != "test-commit" ]]; then
     local print="$1"
+    if [[ "$CMD" = "pull" ]]; then
+    	# Se o branch não for  informado, recupera o atual
+    	IFS=' ' read -a splitArgs <<< "$CMD_ARGS"
+    	lenSize=${#splitArgs[@]}
+    	if [[ lenSize -eq 3 ]]; then
+    		CMD_ARGS="$CMD_ARGS $(currentBranch)"
+    	fi
+    fi
     if [[ "$print" = "true" ]]; then
       printCmd
     fi
@@ -148,7 +156,7 @@ isPush() {
 }
 
 beforePush() {
-  GIT_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  GIT_CURRENT_BRANCH=$(currentBranch)
   GIT_REMOTE_REPO="origin"
   GIT_CURRENT_REMOTE_BRANCH=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
   GIT_REMOTE_BRANCH="$GIT_REMOTE_REPO/$GIT_CURRENT_BRANCH"
@@ -159,6 +167,10 @@ beforePush() {
     	exit $?
     fi
   fi
+}
+
+currentBranch() {
+	echo $(git rev-parse --abbrev-ref HEAD)
 }
 
 gitCmd() {

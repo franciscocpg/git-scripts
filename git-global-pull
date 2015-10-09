@@ -2,10 +2,18 @@
 # Verifica se as configurações estão iniciadas
 git-init-config
 
-GIT_REPO_PATH="$1"
-CLEAR="$2"
+# Import
+. utils.sh
 
-git-cmd pull "-v --no-edit $TIDEXA_GIT_GLOBAL_NAMESPACE master" "$GIT_REPO_PATH" "$CLEAR" "" ".prePull" "" ".postPull"
+# Opts
+# b - branch
+OPTS=b:
+evalArgs "$@"
+
+GIT_REPO_PATH="${args[0]}"
+CLEAR="${args[1]}"
+
+git-cmd pull "-v --no-edit $TIDEXA_GIT_GLOBAL_NAMESPACE $b" "$GIT_REPO_PATH" "$CLEAR" "" ".prePull" "" ".postPull"
 RETURN="$?"
 if [[ "$RETURN" -le 1 ]]; then
 	git-push "$GIT_REPO_PATH" "" "false"
