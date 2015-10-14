@@ -84,6 +84,36 @@ resolveBasename() {
 	basename $(resolvePath "$path")
 }
 
+# Checks md5 sum
+checkmd5sum() {
+	local path="$1"
+	local expectedMD5="$2"
+	local calculatedMD5=$(md5sum "$path")
+	calculatedMD5=${calculatedMD5:0:32}
+	echo "calculatedMD5=$calculatedMD5"
+	echo "expectedMD5=$expectedMD5"
+	if [[ "$expectedMD5" == "$calculatedMD5" ]]; then
+		echo "true"
+	else
+		echo "false"
+	fi
+}
+
+askQuestion() {
+	local question="$1"
+	local required="$2"
+	if [[ -z "$required" ]]; then
+		required="true"
+	fi
+	while true; do
+		read -p "$question: " answer
+		if [ "$required" == "false" ] || [ -n "$answer" ]; then
+			echo "$answer"
+			break	
+		fi
+	done
+}
+
 # Pergunta com resposta sim (s) ou não (n)
 ask() {
 	# Pergunta
