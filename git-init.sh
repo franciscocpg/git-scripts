@@ -21,6 +21,9 @@ if [[ ! -e "$GIT_IGNORE_GLOBAL_HOME" ]]; then
 	git config --global core.excludesfile "$GIT_IGNORE_GLOBAL_HOME"
 fi
 
+# Color output
+git config --global color.ui always
+git config --global color.status always
 
 # Adiciona o path para execução dos comandos
 CONTAINS_GIT_TIDEXA_SCRIPTS=$(cat $BASH_RC | grep GIT_TIDEXA_SCRIPTS)

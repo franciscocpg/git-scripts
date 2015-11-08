@@ -220,7 +220,8 @@ gitCmd() {
 			  # Só mostra status do que alterou
 			  if [[ "$CMD" = "status" ]]; then
 				outputCmd=$(gitCmdExec)
-				if [[ "$outputCmd" != "## master...origin/master" ]]; then
+				noColorOutputCmd=$(echo "$outputCmd" | sed -r 's/\x1B\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g')
+				if [[ "$noColorOutputCmd" != "## master...origin/master" ]]; then
 				   if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
 					OUT="$OUT$path\n"
 				  else
