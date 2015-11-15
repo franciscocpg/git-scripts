@@ -194,8 +194,9 @@ gitCmd() {
 			execGitCmd="true"
 			if isPush && [[ "$CMD_ARGS" != *"--delete"*  ]]; then
 			  outputCmd=$(git status -s -b)
+			  noColorOutputCmd=$(echo "$outputCmd" | sed -r 's/\x1B\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g')
 			  # Pega a primeira linha da saida
-			  outputCmd=$(echo -e "$outputCmd" | sed -n 1p)
+			  outputCmd=$(echo -e "$noColorOutputCmd" | sed -n 1p)
 			  # Não executa o push se a saida não contém o caracter [
 			  if [[ "$FORCE_PUSH" = "false" && "$outputCmd" != *"["* ]]
 			  then
