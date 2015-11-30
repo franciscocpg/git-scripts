@@ -4,7 +4,7 @@ resolvePath() {
 	# Caminho
 	local path="$1"
 	if [[ "$OSTYPE" == *linux* ]]; then
-		RETURN_PATH=$(readkink -f $path)
+		RETURN_PATH=$(readlink -f $path)
 	elif [[ "$OSTYPE" == *darwin* ]]; then
 		RETURN_PATH=$(stat -f "%N" $path)
 	fi

@@ -1,9 +1,9 @@
 #!/bin/bash
 clear
+set -e
 # Importação
 . ./utils.sh
 
-set -e
 # Script de inicialização de ambiente debian/ubuntu
 BASH_RC=$(getBASHRC)
 GIT_IGNORE_GLOBAL_HOME=~/.gitignore_global
