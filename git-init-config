@@ -1,11 +1,13 @@
-#!/bin/bash -i
+#!/bin/bash
 # CHANGE indica se está trocando ou criando/verificando
 CHANGE="$1"
 FOLDER="$2"
-BASH_RC=~/.bashrc
+
 
 # Importação
 . utils.sh
+
+BASH_RC=$(getBASHRC)
 
 changeGitProperty() {
 	local question="$1"
@@ -20,7 +22,6 @@ changeGitProperty() {
 	echo "$question"
 	read gitPropertyValue
 	$GIT_CMD "$gitPropertyValue"
-	echo "$gitProperty=$gitPropertyValue"
 }
 
 changeGitEnvVariable() {
@@ -85,3 +86,7 @@ git config --global credential.helper 'cache --timeout=3600'
 git config --global core.autocrlf input
 # Veja https://git.tidexa-es.com:9443/global-private/infraestrutura-ti/issues/1
 git config --global http.postBuffer 1048576000
+
+if [[ "$CHANGE" == "false" ]]; then
+	echo "Configuração realizada com sucesso"
+fi

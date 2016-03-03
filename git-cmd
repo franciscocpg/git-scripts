@@ -194,7 +194,7 @@ gitCmd() {
 			execGitCmd="true"
 			if isPush && [[ "$CMD_ARGS" != *"--delete"*  ]]; then
 			  outputCmd=$(git status -s -b)
-			  noColorOutputCmd=$(echo "$outputCmd" | sed -r 's/\x1B\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g')
+			  noColorOutputCmd=$(removeColor "$outputCmd")
 			  # Pega a primeira linha da saida
 			  outputCmd=$(echo -e "$noColorOutputCmd" | sed -n 1p)
 			  # Não executa o push se a saida não contém o caracter [
@@ -221,7 +221,7 @@ gitCmd() {
 			  # Só mostra status do que alterou
 			  if [[ "$CMD" = "status" ]]; then
 				outputCmd=$(gitCmdExec)
-				noColorOutputCmd=$(echo "$outputCmd" | sed -r 's/\x1B\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g')
+				noColorOutputCmd=$(removeColor "$outputCmd"``	)
 				if [[ "$noColorOutputCmd" != "## master...origin/master" ]]; then
 				   if [[ "$PRINT_PATH_ONLY" = "true" ]]; then
 					OUT="$OUT$path\n"

@@ -1,9 +1,42 @@
 #!/bin/bash -i
-BASH_RC=~/.bashrc
+# Resolve um caminho para o nome completo
+resolvePath() {
+	# Caminho
+	local path="$1"
+	if [[ "$OSTYPE" == *linux* ]]; then
+		RETURN_PATH=$(readlink -f $path)
+	elif [[ "$OSTYPE" == *darwin* ]]; then
+		RETURN_PATH=$(stat -f "%N" $path)
+	fi
+	echo $RETURN_PATH
+}
+
+getBASHRC() {
+	if [[ "$OSTYPE" == *linux* ]]; then
+		resolvePath ~/.bashrc
+	elif [[ "$OSTYPE" == *darwin* ]]; then
+		resolvePath ~/.bash_profile
+	fi
+}
+
+BASH_RC=$(getBASHRC)
+
+removeColor() {
+	local input="$1"
+	if [[ "$OSTYPE" == *linux* ]]; then
+		echo "$input" | sed -r 's/\x1B\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g'
+	elif [[ "$OSTYPE" == *darwin* ]]; then
+		echo "$input" | sed -E "s/"$'\E'"\[([0-9]{1,2}(;[0-9]{1,2})*)?m//g"
+	fi
+}
 
 # Recupera o nome comercial do OS
 getOSName() {
-	lsb_release -si	
+	if [[ "$OSTYPE" == *linux* ]]; then
+		lsb_release -si
+	elif [[ "$OSTYPE" == *darwin* ]]; then
+		echo "mac"
+	fi
 }
 
 # Recupera a versão do OS
@@ -26,6 +59,8 @@ installSoft() {
 		cmd="sudo apt-get install"
 	elif [[ $(getOSName) == "CentOS" ]]; then
 		cmd="sudo yum install"
+	elif [[ "$(getOSName)" == "mac" ]]; then
+		cmd="brew install"
 	fi
 	cmd="$cmd $soft"
 	$cmd
@@ -65,16 +100,6 @@ appendToBashRC() {
 		# Salva no arquivo
 		echo -e "$CONTENTS" > $BASH_RC
 	fi
-}
-
-# Resolve um caminho para o nome completo
-resolvePath() {
-	# Caminho
-	local path="$1"
-	chd $path
-	RETURN_PATH=$(pwd)
-	chd -
-	echo $RETURN_PATH
 }
 
 # Resolve o nome base do caminho
