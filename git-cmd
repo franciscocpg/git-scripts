@@ -40,55 +40,6 @@ RETURN_STATUS="0"
 # Verifica se as configurações estão iniciadas
 git-init-config
 
-# Corrige o arquivo project.properties que fica mudando de acordo com o ambiente
-# ATENÇÃO. Ao atualizar o netbeans, verificar se não é necessário rever o DEFAULT_VALUE
-normalizeProjectProperties() {
-	DEFAULT_VALUE='${j2ee.server.middleware}/mq/lib/jaxm-api.jar\:${j2ee.server.home}/modules/endorsed/javax.annotation-api.jar\:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar\:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar\:${j2ee.server.home}/modules/javax.mail.jar\:${j2ee.server.home}/modules/javax.websocket-api.jar\:${j2ee.server.home}/modules/javax.batch-api.jar\:${j2ee.server.home}/modules/javax.security.auth.message-api.jar\:${j2ee.server.home}/modules/javax.json.jar\:${j2ee.server.home}/modules/javax.enterprise.concurrent-api.jar\:${j2ee.server.home}/modules/javax.xml.registry-api.jar\:${j2ee.server.home}/modules/javax.enterprise.concurrent.jar\:${j2ee.server.home}/modules/javax.management.j2ee-api.jar\:${j2ee.server.home}/modules/jaxb-osgi.jar\:${j2ee.server.home}/modules/javax.interceptor-api.jar\:${j2ee.server.home}/modules/weld-osgi-bundle.jar\:${j2ee.server.home}/modules/javax.resource-api.jar\:${j2ee.server.home}/modules/javax.ejb-api.jar\:${j2ee.server.home}/modules/javax.faces.jar\:${j2ee.server.home}/modules/javax.jms-api.jar\:${j2ee.server.home}/modules/javax.security.jacc-api.jar\:${j2ee.server.home}/modules/javax.servlet.jsp.jstl.jar\:${j2ee.server.home}/modules/javax.servlet-api.jar\:${j2ee.server.home}/modules/javax.enterprise.deploy-api.jar\:${j2ee.server.home}/modules/javax.xml.rpc-api.jar\:${j2ee.server.home}/modules/javax.el.jar\:${j2ee.server.home}/modules/bean-validator.jar\:${j2ee.server.home}/modules/javax.persistence.jar\:${j2ee.server.home}/modules/javax.transaction-api.jar\:${j2ee.server.home}/modules/javax.inject.jar\:${j2ee.server.home}/modules/webservices-osgi.jar\:${j2ee.server.home}/modules/javax.ws.rs-api.jar\:${j2ee.server.home}/modules/javax.servlet.jsp.jstl-api.jar\:${j2ee.server.home}/modules/javax.servlet.jsp.jar\:${j2ee.server.home}/modules/javax.servlet.jsp-api.jar'
-	KEY="j2ee.platform.classpath"
-	WS_GEN_WRONG='j2ee.platform.wsgen.classpath=${j2ee.server.home}/modules/webservices-osgi.jar:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar:${j2ee.server.home}/modules/jaxb-osgi.jar:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
-	WS_GEN_CORRECT='j2ee.platform.wsgen.classpath=${j2ee.server.home}/modules/webservices-osgi.jar\:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar\:${j2ee.server.home}/modules/jaxb-osgi.jar\:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
-	WS_IMPORT_WRONG='j2ee.platform.wsimport.classpath=${j2ee.server.home}/modules/webservices-osgi.jar:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar:${j2ee.server.home}/modules/jaxb-osgi.jar:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
-	WS_IMPORT_CORRECT='j2ee.platform.wsimport.classpath=${j2ee.server.home}/modules/webservices-osgi.jar\:${j2ee.server.home}/modules/endorsed/webservices-api-osgi.jar\:${j2ee.server.home}/modules/jaxb-osgi.jar\:${j2ee.server.home}/modules/endorsed/jaxb-api-osgi.jar'
-	for file in $(find . -name "project.properties"); do
-		OLD_VALUE=$(cat "$file" | grep $KEY)
-		if [[ -n "$OLD_VALUE" ]]; then
-			# Tranforma em array 
-			arr=$(echo $OLD_VALUE | tr ":" " ")
-			arr=($arr)
-			array_len="${#arr[@]}"
-			if [[ "$array_len" = 35 ]]; then
-				VALUE=${OLD_VALUE/'j2ee.platform.classpath='/}
-				LAST="${VALUE:len - 1}"
-				ascii=`printf "%d" "'$LAST"`
-				# Exclui caracteres que não são letras(CR, LF, etc)
-				if [[ "$ascii" -lt 65 ]]; then
-					len="${#VALUE}"
-					VALUE="${VALUE:0:len - 1}"
-				fi
-				if [[ "$VALUE" != "$DEFAULT_VALUE" ]]; then
-					NEW_VALUE="$KEY=$DEFAULT_VALUE"
-					CONTENTS=$(cat "$file")
-					CONTENTS=${CONTENTS/"$OLD_VALUE"/$NEW_VALUE}
-					# echo -e "$CONTENTS"
-					echo "$CONTENTS" > $file
-				fi
-			fi
-		fi
-		CONTAINS=$(cat "$file" | grep $WS_GEN_WRONG)
-		if [[ -n "$CONTAINS" ]]; then
-			CONTENTS=$(cat "$file")
-			CONTENTS=${CONTENTS/"$WS_GEN_WRONG"/$WS_GEN_CORRECT}
-			echo "$CONTENTS" > $file
-		fi
-		CONTAINS=$(cat "$file" | grep $WS_IMPORT_WRONG)
-		if [[ -n "$CONTAINS" ]]; then
-			CONTENTS=$(cat "$file")
-			CONTENTS=${CONTENTS/"$WS_IMPORT_WRONG"/$WS_IMPORT_CORRECT}
-			echo "$CONTENTS" > $file
-		fi
-	done
-}
-
 printCmd() {
   if [[ "$PRINT_CMD" = "true" ]]; then
     echo -e "\n=========================================="
@@ -109,9 +60,6 @@ gitCmdExec() {
     fi
     if [[ "$print" = "true" ]]; then
       printCmd
-    fi
-    if [[ "$CMD" = "status" || "$CMD" = "add" ]]; then
-    	normalizeProjectProperties
     fi
     if [[ -f "$BEFORE_EXEC" ]]; then
       echo "Executando $BEFORE_EXEC"
@@ -204,7 +152,6 @@ gitCmd() {
 			  fi
 			fi
 			if [[ "$CMD" = "test-commit" ]]; then
-			  normalizeProjectProperties
 			  outputCmd=$(git status -s -b)
 			  # Pega a quantidade de linhas na saida
 			  outputCmdLines=$(echo -e "$outputCmd" | wc -l)
