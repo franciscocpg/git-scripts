@@ -1,0 +1,5 @@
+#!/bin/bash
+folder="$1"
+tag="$2"
+git-cmd tag "-d $tag" "$folder"
+git push origin :refs/tags/$tag
