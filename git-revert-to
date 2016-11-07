@@ -1,0 +1,6 @@
+#!/bin/bash
+# Reverts to a SHA
+folder="$1"
+SHA="$2"
+git-branch-checkout "$folder" "revert-to-$SHA"
+git-cmd revert "--no-edit $SHA..HEAD" "$folder" "$CLEAR"
