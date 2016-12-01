@@ -11,16 +11,6 @@ resolvePath() {
 	echo $RETURN_PATH
 }
 
-getBASHRC() {
-	if [[ "$OSTYPE" == *linux* ]]; then
-		resolvePath ~/.bashrc
-	elif [[ "$OSTYPE" == *darwin* ]]; then
-		resolvePath ~/.bash_profile
-	fi
-}
-
-BASH_RC=$(getBASHRC)
-
 removeColor() {
 	local input="$1"
 	if [[ "$OSTYPE" == *linux* ]]; then

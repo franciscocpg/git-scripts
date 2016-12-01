@@ -1,13 +1,9 @@
 #!/bin/bash
 # CHANGE indica se está trocando ou criando/verificando
 CHANGE="$1"
-FOLDER="$2"
-
 
 # Importação
 . utils.sh
-
-BASH_RC=$(getBASHRC)
 
 changeGitProperty() {
 	local question="$1"
@@ -24,68 +20,17 @@ changeGitProperty() {
 	$GIT_CMD "$gitPropertyValue"
 }
 
-changeGitEnvVariable() {
-	local question="$1"
-	local gitEnvVariable="$2"
-	local gitEnvVariableValue="$3"
-	if [[ "$CHANGE" != "true" ]]; then
-		CONTAINS_GIT_TIDEXA_VARIABLE=$(cat $BASH_RC | grep $gitEnvVariable=)
-		if [[ -n "$CONTAINS_GIT_TIDEXA_VARIABLE" ]]; then
-			return;
-		fi
-	fi
-	if [[ -z "$gitEnvVariableValue" ]]; then
-		echo "$question"
-		read gitEnvVariableValue
-	fi
-	echo "export $gitEnvVariable=$gitEnvVariableValue" >> $BASH_RC
-}
-
 changeGitProperty "Entre com seu nome completo" "user.name"
 changeGitProperty "Entre com seu e-mail" "user.email"
-changeGitEnvVariable "Entre com seu usuário no gitlab (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GIT_NAMESPACE"
-changeGitEnvVariable "Entre com o token privado no gitlab (Pode ser visualizado em Profile -> Accounts)" "TIDEXA_GITLAB_TOKEN"
-changeGitEnvVariable "" "TIDEXA_GIT_URL" "acessa"
-changeGitEnvVariable "" "TIDEXA_GITLAB_DOMAIN" "git.tidexa-es.com"
-changeGitEnvVariable "" "TIDEXA_GITLAB_API_HOST" "https://"'$TIDEXA_GITLAB_DOMAIN'":9443"
-changeGitEnvVariable "" "TIDEXA_GITLAB_API_PATH" "/api/v3"
-changeGitEnvVariable "" "TIDEXA_GITLAB_API_URL" '$TIDEXA_GITLAB_API_HOST$TIDEXA_GITLAB_API_PATH'
-changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_NAMESPACE" "global"
-changeGitEnvVariable "" "TIDEXA_GIT_DSV_NAMESPACE" "dsv"
-changeGitEnvVariable "" "TIDEXA_GIT_GLOBAL_PRIVATE_NAMESPACE" "global-private"
-changeGitEnvVariable "" "TIDEXA_GITLAB_GLOBAL_NAMESPACE_ID" "12"
-# Inicia worspace
-if [ -n "$FOLDER" ]; then
-	chd ..
-	currentFolder=$(pwd)
-	gitlabUser=$(basename $currentFolder)
-	changeGitEnvVariable "" "TIDEXA_GITLAB_USER" "$gitlabUser"
-	chd -
-	chd ../../../..
-	currentFolder=$(pwd)
-	gitlabWS=$currentFolder
-	changeGitEnvVariable "" "TIDEXA_WS" "$gitlabWS"
-	chd -
-	changeGitEnvVariable "" "TIDEXA_GIT" '$TIDEXA_WS/git'
-	changeGitEnvVariable "" "TIDEXA_SVN" '$TIDEXA_WS/svn'
-	changeGitEnvVariable "" "TIDEXA_GITLAB" '$TIDEXA_GIT/$TIDEXA_GITLAB_DOMAIN'
-	changeGitEnvVariable "" "TIDEXA_GITLAB_USER_PATH" '$TIDEXA_GITLAB/$TIDEXA_GITLAB_USER'
-fi
 
-# Id do aprovador de MRs
-appendToBashRC "TIDEXA_GIT_GLOBAL_ASSIGNEE_ID" "8"
 git config --global push.default simple
 # Diff tool meld
 git config --global diff.tool meld
-# Não verifica certificado
-git config --global http.sslVerify false
 # Mantém as credencias em cache por uma hora. Utilizado em https para não ficar pedindo
 # usuário e senha a cada requisição.
 git config --global credential.helper 'cache --timeout=3600'
 # Quebra de linha deve ser a do linux
 git config --global core.autocrlf input
-# Veja https://git.tidexa-es.com:9443/global-private/infraestrutura-ti/issues/1
-git config --global http.postBuffer 1048576000
 
 if [[ "$CHANGE" == "false" ]]; then
 	echo "Configuração realizada com sucesso"

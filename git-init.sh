@@ -5,7 +5,6 @@ set -e
 . ./utils.sh
 
 # Script de inicialização de ambiente debian/ubuntu
-BASH_RC=$(getBASHRC)
 GIT_IGNORE_GLOBAL_HOME=~/.gitignore_global
 FOLDER=$(pwd)
 
@@ -49,4 +48,4 @@ if [[ "$OSTYPE" == *linux* ]]; then
 	sudo update-ca-certificates
 fi
 
-./git-init-config "false" "$FOLDER"
+./git-init-config "false"
