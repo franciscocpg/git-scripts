@@ -1,0 +1,3 @@
+#!/bin/bash
+folder="$1"
+git-cmd describe "--abbrev=0 --tags" "$folder"
