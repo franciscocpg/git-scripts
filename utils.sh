@@ -45,11 +45,13 @@ installSoft() {
 	local cmd="";
 	# Nome do sw
 	local soft="$1"
-	if [[ $(getOSName) == "Ubuntu" ]]; then
-		cmd="sudo apt-get install"
-	elif [[ $(getOSName) == "CentOS" ]]; then
-		cmd="sudo yum install"
-	elif [[ "$(getOSName)" == "mac" ]]; then
+	if [[ "$OSTYPE" == *linux* ]]; then
+		if [[ $((which apt-get && echo "ok") | tail -n 1) == "ok" ]]; then
+			cmd="sudo apt-get install"
+		elif [[ $((which pacman && echo "ok") | tail -n 1) == "ok" ]]; then
+			cmd="sudo pacman -S --noconfirm"
+		fi
+	elif [[ "$OSTYPE" == *darwin* ]]; then
 		cmd="brew install"
 	fi
 	cmd="$cmd $soft"
