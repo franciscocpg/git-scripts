@@ -10,5 +10,5 @@ RETURN=$?
 if [[ "$RETURN" > 0  ]]; then
 	git-cmd checkout "$NAME" "$GIT_REPO_PATH"
 else
-	git-cmd branch "-u origin" "$GIT_REPO_PATH" "false"
+	git-cmd branch "-u origin/master" "$GIT_REPO_PATH" "false"
 fi
